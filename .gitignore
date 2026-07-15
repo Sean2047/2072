@@ -1,0 +1,11 @@
+# 构建产物（可随时由 build.py 重建）
+website_prototype/site/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 系统杂项
+.DS_Store
+Thumbs.db
+~$*

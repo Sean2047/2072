@@ -1,0 +1,26 @@
+{
+ "s4-2-1": {
+  "section": "4.2.1",
+  "hash": "a0dfc3eef8d890b4"
+ },
+ "s4-4-1": {
+  "section": "4.4.1",
+  "hash": "87fafbe996813f38"
+ },
+ "s4-9-1": {
+  "section": "4.9.1",
+  "hash": "b31510897b52563a"
+ },
+ "s4-9-2": {
+  "section": "4.9.2",
+  "hash": "a24acfb8490c60c3"
+ },
+ "s4-9-6": {
+  "section": "4.9.6",
+  "hash": "9537ce2cfdcf5915"
+ },
+ "s4-9": {
+  "section": "4.9-intro",
+  "hash": "f6a6a3825e7390cf"
+ }
+}

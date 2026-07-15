@@ -1,0 +1,110 @@
+:root {
+  --bg: #faf9f6; --fg: #1f2328; --muted: #6b7280; --line: #e5e1d8;
+  --accent: #8a5a2b; --accent-bg: #f4ede2; --link: #1a5fb4;
+  --concept: #6d28d9; --card: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", SimSun, serif;
+  line-height: 1.85; font-size: 17px;
+}
+nav.top {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 24px; border-bottom: 1px solid var(--line); background: var(--card);
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 14px;
+}
+nav.top a { color: var(--link); text-decoration: none; }
+nav.top .proto { color: var(--muted); }
+main { max-width: 860px; margin: 0 auto; padding: 32px 24px 80px; }
+
+.hero h1 { font-size: 28px; margin: 8px 0; }
+.hero .sub { color: var(--muted); }
+
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.badge {
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 12px;
+  padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--card); color: var(--muted);
+}
+.badge.type-概念 { background: #f3eefe; color: var(--concept); border-color: #ddd0f5; }
+.badge.type-章节 { background: #eef4fe; color: var(--link); border-color: #d0e0f5; }
+.badge.type-索引 { background: #eefaf0; color: #217a3c; border-color: #cfe8d6; }
+.badge.var { background: var(--accent-bg); color: var(--accent); border-color: #e6d5bd; cursor: help; }
+
+.entry-head h1 { font-size: 26px; margin: 4px 0 2px; }
+.note {
+  font-family: "PingFang SC", sans-serif; font-size: 14px; color: #92400e;
+  background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; padding: 8px 14px; margin: 12px 0;
+}
+.ltag {
+  font-family: "PingFang SC", sans-serif; font-size: 12px; letter-spacing: 2px;
+  color: var(--muted); margin-bottom: 2px;
+}
+section.l1 { margin-top: 26px; }
+.summary { font-size: 21px; font-weight: 600; margin: 4px 0; }
+section.l2 {
+  margin-top: 18px; background: var(--card); border: 1px solid var(--line);
+  border-left: 3px solid var(--accent); border-radius: 6px; padding: 14px 20px;
+}
+details.l3 { margin-top: 22px; }
+details.l3 > summary {
+  cursor: pointer; font-family: "PingFang SC", sans-serif; font-weight: 600;
+  color: var(--accent); padding: 10px 0; user-select: none;
+}
+.prose p { margin: 0 0 1em; text-align: justify; }
+.prose .coda { color: var(--muted); font-style: italic; border-top: 1px solid var(--line); padding-top: 12px; }
+.prose table { border-collapse: collapse; margin: 16px 0; font-size: 15px; width: 100%; }
+.prose th, .prose td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+.prose th { background: var(--accent-bg); }
+blockquote { margin: 1em 0; padding: 2px 18px; border-left: 3px solid var(--accent); background: var(--accent-bg); border-radius: 4px; }
+
+a.entry-link { color: var(--link); text-decoration: none; border-bottom: 1px dashed #9db9dd; }
+a.entry-link.concept { color: var(--concept); border-bottom-color: #c4b0ea; }
+a.entry-link:hover { background: #eef4fe; }
+.unresolved { border-bottom: 1px dotted #c08383; color: #8a4b4b; cursor: help; }
+
+section.children h2, section.related h2, section.backlinks h2 {
+  font-size: 15px; font-family: "PingFang SC", sans-serif; letter-spacing: 1px;
+  color: var(--muted); margin: 34px 0 8px; border-top: 1px solid var(--line); padding-top: 18px;
+}
+.children ul { list-style: none; padding: 0; margin: 0; }
+.children li { padding: 8px 0; border-bottom: 1px dashed var(--line); }
+.children li .csum { display: block; font-size: 14px; color: var(--muted); }
+.children li.missing { color: var(--muted); }
+.children .tag { font-size: 12px; background: var(--line); border-radius: 999px; padding: 1px 8px; margin-left: 8px; font-family: "PingFang SC", sans-serif; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-family: "PingFang SC", sans-serif; font-size: 14px; background: var(--card);
+  border: 1px solid var(--line) !important; border-radius: 999px; padding: 4px 14px;
+}
+
+.filters { margin: 20px 0; font-family: "PingFang SC", sans-serif; }
+.fgroup { display: inline-flex; align-items: center; gap: 6px; margin-right: 18px; margin-bottom: 8px; }
+.flabel { font-size: 13px; color: var(--muted); }
+.fchip {
+  font-size: 13px; border: 1px solid var(--line); background: var(--card);
+  border-radius: 999px; padding: 3px 12px; cursor: pointer;
+}
+.fchip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.card {
+  display: block; background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  padding: 14px 16px; text-decoration: none; color: var(--fg); transition: box-shadow .15s;
+}
+.card:hover { box-shadow: 0 3px 14px rgba(0,0,0,.08); }
+.card.hidden { display: none; }
+.card-top { display: flex; justify-content: space-between; font-size: 12px; font-family: "PingFang SC", sans-serif; }
+.card-top .src { color: var(--muted); }
+.card h3 { margin: 8px 0 4px; font-size: 17px; }
+.card p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+#tooltip {
+  position: fixed; z-index: 99; max-width: 340px; background: #fff;
+  border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,.14);
+  padding: 12px 16px; font-size: 14px; line-height: 1.7; pointer-events: none;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+#tooltip .t-title { font-weight: 600; margin-bottom: 2px; }
+#tooltip .t-type { font-size: 11px; color: var(--muted); margin-left: 6px; }
+#tooltip .t-sum { color: #444; }
