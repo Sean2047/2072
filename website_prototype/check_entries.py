@@ -36,9 +36,16 @@ def latest_workfile():
     return max(cands, key=ver) if cands else None
 
 def parse_assignment(path):
-    """解析第2节归属清单：{节号: layer}。决定归属取单元格内首个 理论|技术|事件。"""
+    """解析第2节归属清单：{节号: layer}。决定归属取单元格内首个 理论|技术|事件。
+    注：VM 挂载缓存可能把宿主刚编辑的文件按旧长度截断（多字节字符切半），
+    这里用容错解码避免崩溃，并在发现坏字节时告警（清单表通常不在截断点附近）。"""
+    raw = open(path, 'rb').read()
+    text = raw.decode('utf-8', errors='replace')
+    if '�' in text:
+        warns.append(f'[L] {os.path.basename(path)} 读取到坏字节（疑似挂载缓存截断）——清单解析继续，结果需人工复核；'
+                     f'可稍后重跑或在宿主侧确认文件完整')
     amap = {}
-    for line in open(path, encoding='utf-8'):
+    for line in text.split('\n'):
         if not line.startswith('|'):
             continue
         cells = [c.strip() for c in line.strip().strip('|').split('|')]
