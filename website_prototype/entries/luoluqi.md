@@ -3,7 +3,7 @@ id: luoluqi
 title: 裸露期
 type: 概念
 layer: 理论
-source: v149 4.2.1
+source: v150 §4.2.1 第1段（定义：就业崩塌先于制度到位/财富仍增长/真实痛苦来自时序落差）+ §4.2.2 各路径小节（中国3—5年最短、A1约5—8年、欧洲最长、D/E类结构性不随时间结束）
 paths: 全路径
 domain: 经济/就业
 variables: V1, V7

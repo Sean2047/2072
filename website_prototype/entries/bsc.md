@@ -3,7 +3,7 @@ id: bsc
 title: 基本支持积分（BSC）
 type: 概念
 layer: 理论
-source: v149 关键字词典 + 4.9.1
+source: v150 关键字词典BSC条目 + §4.9.1 第2段（政治妥协产物/对比UBI与实物配给）、第3段（2052—2055年BSC覆盖基本生存=L3物质标志）
 paths: A1
 domain: 经济/社会保障
 variables: V1, V4

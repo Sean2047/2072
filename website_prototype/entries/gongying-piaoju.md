@@ -3,7 +3,7 @@ id: gongying-piaoju
 title: 供应票据体系
 type: 概念
 layer: 理论
-source: v149 关键字词典 + 4.9.2
+source: v150 关键字词典供应票据体系条目 + §4.9.2 第1段（精确维持可见落差=功能性设计非财政无奈）
 paths: A2
 domain: 经济/社会保障
 variables: V1, V4

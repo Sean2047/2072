@@ -2,14 +2,29 @@
 """2072 知识库网站原型构建脚本（零依赖）。
 
 用法: python3 build.py
-输入: entries/*.md（frontmatter + 可选正文）+ ../2072_v149.md（章节词条原文按节号提取）
+输入: entries/*.md（frontmatter + 可选正文）+ ../2072_vNNN.md（自动取版本号最大者，章节词条原文按节号提取）
 输出: site/ 静态站点 + graph.json/entries.db 关联数据库。
 构建报告打印到控制台（链接校验 = check_2072 引用校验的构建时形态）。
 """
 import os, re, sys, html, json, glob
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-V149 = os.path.join(BASE, '..', '2072_v149.md')
+
+def _latest_base_doc():
+    """自动定位当前基准文档：project 根目录下 2072_vNNN.md 中版本号最大的一个。
+    避免每次基准文档版本递增（v149→v150→……）都要手改本脚本硬编码路径。"""
+    candidates = glob.glob(os.path.join(BASE, '..', '2072_v*.md'))
+    versioned = []
+    for p in candidates:
+        m = re.search(r'2072_v(\d+)\.md$', os.path.basename(p))
+        if m:
+            versioned.append((int(m.group(1)), p))
+    if not versioned:
+        raise FileNotFoundError('未找到 2072_vNNN.md 基准文档')
+    versioned.sort()
+    return versioned[-1][1]
+
+V149 = _latest_base_doc()  # 变量名沿用历史命名，实际指向当前最新版本基准文档
 ENTRY_DIR = os.path.join(BASE, 'entries')
 OUT = os.path.join(BASE, 'site')
 
@@ -55,7 +70,8 @@ def extract_section(lines, sec):
     intro = sec.endswith('-intro')
     if intro:
         sec = sec[:-6]
-    level = '###' if sec.count('.') == 2 else '##'
+    # 二级节(X.X)用##；三级(X.X.X)及形式上用###标题的四级编号节(如1.4.4.1)用###
+    level = '##' if sec.count('.') == 1 else '###'
     pat = re.compile(r'^%s\s+%s　' % (level, re.escape(sec)))
     start = None
     for i, l in enumerate(lines):
@@ -113,7 +129,7 @@ def md_to_html(md):
 
 # ---------- linking ----------
 
-SEC_REF = re.compile(r'(?:见)?(\d+\.\d+(?:\.\d+)?)节')
+SEC_REF = re.compile(r'(?:见)?(\d+\.\d+(?:\.\d+){0,2})节')
 
 def link_refs(html_text, sec_map, stats, self_id):
     def repl(m):
@@ -183,13 +199,20 @@ PAGE = '''<!DOCTYPE html>
 <div id="tooltip" hidden></div>
 <script src="data.js"></script><script src="app.js"></script></body></html>'''
 
-def entry_page(e, body_html, backlinks, id2entry):
+def entry_page(e, body_html, backlinks, id2entry, iface=None):
     parts = [f'<header class="entry-head"><h1>{html.escape(e["title"])}</h1>', badge_row(e)]
     if e.get('note'):
         parts.append(f'<div class="note">⚠ {inline_md(e["note"])}</div>')
     parts.append('</header>')
     parts.append(f'<section class="l1"><div class="ltag">一句话摘要</div><p class="summary">{inline_md(e["summary"])}</p></section>')
     parts.append(f'<section class="l2"><div class="ltag">一段概述</div>{md_to_html(e["overview"])}</section>')
+    if e['type'] == '事件' and e.get('time_span'):
+        iface = iface or {}
+        parts.append('<section class="interface"><h2>接口声明</h2>'
+                      f'<dl><dt>时间位置</dt><dd>{inline_md(e.get("time_span",""))}</dd>'
+                      f'<dt>演练机制</dt><dd>{iface.get("mechanism_tested") or md_to_html(e.get("mechanism_tested",""))}</dd>'
+                      f'<dt>可替换性</dt><dd>{iface.get("substitutability") or md_to_html(e.get("substitutability",""))}</dd>'
+                      f'<dt>反向义务</dt><dd>{iface.get("counter_obligation") or md_to_html(e.get("counter_obligation",""))}</dd></dl></section>')
     label = '完整机制推导（v149 原文）' if e['type'] == '章节' else '词条正文'
     open_attr = '' if e['type'] == '章节' else ' open'
     parts.append(f'<details class="l3"{open_attr}><summary>{label}</summary><div class="prose">{body_html}</div></details>')
@@ -259,6 +282,19 @@ def main():
         h = link_terms(h, alias_map, e['id'], stats)
         bodies[e['id']] = h
 
+    # 事件词条接口声明字段：演练机制/可替换性/反向义务同样过节号链接解析（D-046③：真实超链接，构建时自动校验）
+    ifaces = {}
+    for e in entries:
+        if e['type'] != '事件':
+            continue
+        ih = {}
+        for field in ('mechanism_tested', 'substitutability', 'counter_obligation'):
+            fh = md_to_html(e.get(field, ''))
+            fh = link_refs(fh, sec_map, stats, e['id'])
+            fh = link_terms(fh, alias_map, e['id'], stats)
+            ih[field] = fh
+        ifaces[e['id']] = ih
+
     backlinks = {}
     for src, _sec, tid in stats['resolved']:
         backlinks.setdefault(tid, set()).add(src)
@@ -266,7 +302,7 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     for e in entries:
         with open(os.path.join(OUT, e['id'] + '.html'), 'w', encoding='utf-8') as f:
-            f.write(entry_page(e, bodies[e['id']], backlinks.get(e['id'], set()), id2entry))
+            f.write(entry_page(e, bodies[e['id']], backlinks.get(e['id'], set()), id2entry, ifaces.get(e['id'])))
     with open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(index_page(entries))
     data = {e['id']: {'title': e['title'], 'summary': e['summary'], 'type': e['type']} for e in entries}
