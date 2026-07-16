@@ -103,6 +103,46 @@
   "section": "1.7-intro",
   "hash": "c2678630c7ddb9f7"
  },
+ "s2-1": {
+  "section": "2.1",
+  "hash": "65d53d35d0a1ac51"
+ },
+ "s2-2": {
+  "section": "2.2",
+  "hash": "97b4c3501ae44f1d"
+ },
+ "s2-3-1": {
+  "section": "2.3.1",
+  "hash": "504e2397ce6b53d8"
+ },
+ "s2-3-2": {
+  "section": "2.3.2",
+  "hash": "5bb16f0afca9a0c5"
+ },
+ "s2-3-3": {
+  "section": "2.3.3",
+  "hash": "9731f4fbc6cf6674"
+ },
+ "s2-3": {
+  "section": "2.3-intro",
+  "hash": "d8f0c7fe18483be0"
+ },
+ "s2-4": {
+  "section": "2.4",
+  "hash": "9c4b48ac63658450"
+ },
+ "s2-5": {
+  "section": "2.5",
+  "hash": "26303b2efe6ddae3"
+ },
+ "s2-6": {
+  "section": "2.6",
+  "hash": "e208d437696d57d0"
+ },
+ "s3-1-1": {
+  "section": "3.1.1",
+  "hash": "c5446100c9c48ea7"
+ },
  "s3-12-1": {
   "section": "3.12.1",
   "hash": "dee8e75953890f4c"
@@ -139,6 +179,62 @@
   "section": "3.12-intro",
   "hash": "8c2b5aab24d1f625"
  },
+ "s3-2-3": {
+  "section": "3.2.3",
+  "hash": "32c218ed149ae10a"
+ },
+ "s3-20-1": {
+  "section": "3.20.1",
+  "hash": "1c524fc640635847"
+ },
+ "s3-20-2": {
+  "section": "3.20.2",
+  "hash": "a32277b594878ef0"
+ },
+ "s3-20-3": {
+  "section": "3.20.3",
+  "hash": "c2794ff4d0671c92"
+ },
+ "s3-20-4": {
+  "section": "3.20.4",
+  "hash": "a0ae2663cd23a3ce"
+ },
+ "s3-20": {
+  "section": "3.20-intro",
+  "hash": "af7a0de936ff68c4"
+ },
+ "s3-21-1": {
+  "section": "3.21.1",
+  "hash": "1d0cc458bdd95655"
+ },
+ "s3-21-2": {
+  "section": "3.21.2",
+  "hash": "d4c2fd13d262faa5"
+ },
+ "s3-21-3": {
+  "section": "3.21.3",
+  "hash": "4bedd11b3afa918f"
+ },
+ "s3-21": {
+  "section": "3.21-intro",
+  "hash": "6401d18836b996e0"
+ },
+ "s3-8-1": {
+  "section": "3.8.1",
+  "hash": "99101981f98e5598"
+ },
+ "s3-8-2": {
+  "section": "3.8.2",
+  "hash": "0314c6071f8334c1"
+ },
+ "s3-8-3": {
+  "section": "3.8.3",
+  "hash": "a252834467acf737"
+ },
+ "s3-8": {
+  "section": "3.8-intro",
+  "hash": "07f834d7eea25591"
+ },
  "s4-1-1": {
   "section": "4.1.1",
   "hash": "3efa48dbe013916e"
@@ -155,6 +251,242 @@
   "section": "4.1-intro",
   "hash": "9ace79816d2503bf"
  },
+ "s4-10-1": {
+  "section": "4.10.1",
+  "hash": "1762fb724bd20bf5"
+ },
+ "s4-10-2": {
+  "section": "4.10.2",
+  "hash": "7c1067c5eaf3a11a"
+ },
+ "s4-10-3": {
+  "section": "4.10.3",
+  "hash": "fde93c94d7c09632"
+ },
+ "s4-10-4": {
+  "section": "4.10.4",
+  "hash": "8eb918d6d427bf14"
+ },
+ "s4-10-5": {
+  "section": "4.10.5",
+  "hash": "b4da178e7585b9d8"
+ },
+ "s4-10-6": {
+  "section": "4.10.6",
+  "hash": "88bdcf7025bc733f"
+ },
+ "s4-10-7": {
+  "section": "4.10.7",
+  "hash": "0f2b7ebad946da3a"
+ },
+ "s4-10-8": {
+  "section": "4.10.8",
+  "hash": "772e8e99adeeb089"
+ },
+ "s4-10": {
+  "section": "4.10-intro",
+  "hash": "3862506724104aa9"
+ },
+ "s4-11-1": {
+  "section": "4.11.1",
+  "hash": "f3dbc0269b8a0650"
+ },
+ "s4-11-2": {
+  "section": "4.11.2",
+  "hash": "d5c77f89224db4fe"
+ },
+ "s4-11-3": {
+  "section": "4.11.3",
+  "hash": "6d51c13c0efdb21c"
+ },
+ "s4-11-4": {
+  "section": "4.11.4",
+  "hash": "3df809a5ae934e57"
+ },
+ "s4-11-5": {
+  "section": "4.11.5",
+  "hash": "408012bd551676aa"
+ },
+ "s4-11-6": {
+  "section": "4.11.6",
+  "hash": "ea0555886fa5cebf"
+ },
+ "s4-11-7": {
+  "section": "4.11.7",
+  "hash": "0aaac2a629802cf3"
+ },
+ "s4-11-8": {
+  "section": "4.11.8",
+  "hash": "de23c0510dc0874f"
+ },
+ "s4-11": {
+  "section": "4.11-intro",
+  "hash": "1199f75ccd75d460"
+ },
+ "s4-12-1": {
+  "section": "4.12.1",
+  "hash": "74635fbf3c39da16"
+ },
+ "s4-12-2": {
+  "section": "4.12.2",
+  "hash": "cd989c9d387093cc"
+ },
+ "s4-12-3": {
+  "section": "4.12.3",
+  "hash": "c16b6889ae858f3c"
+ },
+ "s4-12-4": {
+  "section": "4.12.4",
+  "hash": "231a0d0f582bac87"
+ },
+ "s4-12-5": {
+  "section": "4.12.5",
+  "hash": "c8a58f4720df6341"
+ },
+ "s4-12-6": {
+  "section": "4.12.6",
+  "hash": "9ee3bdb88aa5c84c"
+ },
+ "s4-12-7": {
+  "section": "4.12.7",
+  "hash": "889fea56b457d864"
+ },
+ "s4-12": {
+  "section": "4.12-intro",
+  "hash": "9f0381a48ceedda0"
+ },
+ "s4-13-1": {
+  "section": "4.13.1",
+  "hash": "ee26f503d99b1cd2"
+ },
+ "s4-13-2": {
+  "section": "4.13.2",
+  "hash": "c62a2f4dc88b7c52"
+ },
+ "s4-13-3": {
+  "section": "4.13.3",
+  "hash": "9a9aceabec19bf15"
+ },
+ "s4-13-4": {
+  "section": "4.13.4",
+  "hash": "7d49bc0606ef4883"
+ },
+ "s4-13": {
+  "section": "4.13-intro",
+  "hash": "e3b0c44298fc1c14"
+ },
+ "s4-14-1": {
+  "section": "4.14.1",
+  "hash": "e9980c825fd95b10"
+ },
+ "s4-14-2": {
+  "section": "4.14.2",
+  "hash": "b6db2ffaea8c833e"
+ },
+ "s4-14-3": {
+  "section": "4.14.3",
+  "hash": "56457f82b986955c"
+ },
+ "s4-14-4": {
+  "section": "4.14.4",
+  "hash": "c17713504630de35"
+ },
+ "s4-14-5": {
+  "section": "4.14.5",
+  "hash": "d98f87c2206335ee"
+ },
+ "s4-14-6": {
+  "section": "4.14.6",
+  "hash": "7cbe8a29feab59b2"
+ },
+ "s4-14": {
+  "section": "4.14-intro",
+  "hash": "20233cb6387d2e29"
+ },
+ "s4-15-1": {
+  "section": "4.15.1",
+  "hash": "7bb2684624380065"
+ },
+ "s4-15-2": {
+  "section": "4.15.2",
+  "hash": "f47560da4004cb2d"
+ },
+ "s4-15-3": {
+  "section": "4.15.3",
+  "hash": "6f3719b9711b6452"
+ },
+ "s4-15-4": {
+  "section": "4.15.4",
+  "hash": "54c903b5f146bb4b"
+ },
+ "s4-15": {
+  "section": "4.15-intro",
+  "hash": "30639ec09c703ddd"
+ },
+ "s4-16-1": {
+  "section": "4.16.1",
+  "hash": "5e0c22617a9da6b2"
+ },
+ "s4-16-2": {
+  "section": "4.16.2",
+  "hash": "cc419fb694960107"
+ },
+ "s4-16-3": {
+  "section": "4.16.3",
+  "hash": "037677b189d3dbff"
+ },
+ "s4-16-4": {
+  "section": "4.16.4",
+  "hash": "807f9a42ecc0392b"
+ },
+ "s4-16": {
+  "section": "4.16-intro",
+  "hash": "00cb3fb017439e0d"
+ },
+ "s4-17-1": {
+  "section": "4.17.1",
+  "hash": "c8243f6373c36d21"
+ },
+ "s4-17-2": {
+  "section": "4.17.2",
+  "hash": "4e94dc5fd3ecf428"
+ },
+ "s4-17-3": {
+  "section": "4.17.3",
+  "hash": "74bca9e89cd94d0e"
+ },
+ "s4-17-4": {
+  "section": "4.17.4",
+  "hash": "0f7b5cdd0696c199"
+ },
+ "s4-17-5": {
+  "section": "4.17.5",
+  "hash": "6f13fae633ce2cab"
+ },
+ "s4-17": {
+  "section": "4.17-intro",
+  "hash": "62a493a5b538e2d9"
+ },
+ "s4-18-1": {
+  "section": "4.18.1",
+  "hash": "66cb2b869b830e37"
+ },
+ "s4-18-2": {
+  "section": "4.18.2",
+  "hash": "1296265eab8ed8d6"
+ },
+ "s4-18-3": {
+  "section": "4.18.3",
+  "hash": "dbdec972217123fa"
+ },
+ "s4-18-4": {
+  "section": "4.18.4",
+  "hash": "1830da8737ee8b2f"
+ },
+ "s4-18": {
+  "section": "4.18-intro",
+  "hash": "e3b0c44298fc1c14"
+ },
  "s4-2-1": {
   "section": "4.2.1",
   "hash": "a0dfc3eef8d890b4"
@@ -169,15 +501,151 @@
  },
  "s4-2-4": {
   "section": "4.2.4",
-  "hash": "bcbe046cb15b8eb0"
+  "hash": "52095053b4f68422"
  },
  "s4-2": {
   "section": "4.2-intro",
   "hash": "1637acf5b98bc880"
  },
+ "s4-3-1": {
+  "section": "4.3.1",
+  "hash": "3561330bc48f855a"
+ },
+ "s4-3-2": {
+  "section": "4.3.2",
+  "hash": "a224e64c1cfc1431"
+ },
+ "s4-3-3": {
+  "section": "4.3.3",
+  "hash": "c2992841e516b0bd"
+ },
+ "s4-3-4": {
+  "section": "4.3.4",
+  "hash": "bfe471a7807e23bc"
+ },
+ "s4-3-5": {
+  "section": "4.3.5",
+  "hash": "a7fdbe4cb7e9bd91"
+ },
+ "s4-3-6": {
+  "section": "4.3.6",
+  "hash": "b10728bfe2fa3eae"
+ },
+ "s4-3-7": {
+  "section": "4.3.7",
+  "hash": "e94305be76fdda85"
+ },
+ "s4-3-8": {
+  "section": "4.3.8",
+  "hash": "2872265bb92a3005"
+ },
+ "s4-3-9": {
+  "section": "4.3.9",
+  "hash": "cb0a53501cb38b79"
+ },
+ "s4-3": {
+  "section": "4.3-intro",
+  "hash": "5c88ddbe036e8f9e"
+ },
  "s4-4-1": {
   "section": "4.4.1",
-  "hash": "87fafbe996813f38"
+  "hash": "521bda0959fe2fb5"
+ },
+ "s4-4-2": {
+  "section": "4.4.2",
+  "hash": "279f349b152760f5"
+ },
+ "s4-4-3": {
+  "section": "4.4.3",
+  "hash": "8bf1cd7b06cb8f42"
+ },
+ "s4-4": {
+  "section": "4.4-intro",
+  "hash": "c3e135d0dd3de4a8"
+ },
+ "s4-5-1": {
+  "section": "4.5.1",
+  "hash": "2d68b118979e1ab4"
+ },
+ "s4-5-2": {
+  "section": "4.5.2",
+  "hash": "2475ef70df1fd268"
+ },
+ "s4-5": {
+  "section": "4.5-intro",
+  "hash": "546add15e7d89ea0"
+ },
+ "s4-6-1": {
+  "section": "4.6.1",
+  "hash": "ce0125e1a295400d"
+ },
+ "s4-6-2": {
+  "section": "4.6.2",
+  "hash": "f39877ccf2d37c5e"
+ },
+ "s4-6": {
+  "section": "4.6-intro",
+  "hash": "cf804e0432b9f919"
+ },
+ "s4-7-1": {
+  "section": "4.7.1",
+  "hash": "86f275442afaeb6b"
+ },
+ "s4-7-2": {
+  "section": "4.7.2",
+  "hash": "cf99f94bbddedce5"
+ },
+ "s4-7-3": {
+  "section": "4.7.3",
+  "hash": "0365ce217b515781"
+ },
+ "s4-7-4": {
+  "section": "4.7.4",
+  "hash": "2fcf6a2c68b32e69"
+ },
+ "s4-7-5": {
+  "section": "4.7.5",
+  "hash": "eef723bef98172dc"
+ },
+ "s4-7-6": {
+  "section": "4.7.6",
+  "hash": "a716ae6c5d56d62a"
+ },
+ "s4-7": {
+  "section": "4.7-intro",
+  "hash": "e3b0c44298fc1c14"
+ },
+ "s4-8-1": {
+  "section": "4.8.1",
+  "hash": "bc33fa5815cacca0"
+ },
+ "s4-8-2": {
+  "section": "4.8.2",
+  "hash": "c9ababa207bbc595"
+ },
+ "s4-8-3": {
+  "section": "4.8.3",
+  "hash": "6de21c74cd29cbff"
+ },
+ "s4-8-4": {
+  "section": "4.8.4",
+  "hash": "181472cb9917d7b3"
+ },
+ "s4-8-5": {
+  "section": "4.8.5",
+  "hash": "3bd96df1a5844c80"
+ },
+ "s4-8-6": {
+  "section": "4.8.6",
+  "hash": "ee82c395ae1e2c70"
+ },
+ "s4-8-7": {
+  "section": "4.8.7",
+  "hash": "fe2564976932694a"
+ },
+ "s4-8": {
+  "section": "4.8-intro",
+  "hash": "098761cd0623bd46"
  },
  "s4-9-1": {
   "section": "4.9.1",
@@ -186,6 +654,18 @@
  "s4-9-2": {
   "section": "4.9.2",
   "hash": "a24acfb8490c60c3"
+ },
+ "s4-9-3": {
+  "section": "4.9.3",
+  "hash": "5e68adf037bad335"
+ },
+ "s4-9-4": {
+  "section": "4.9.4",
+  "hash": "c3488e064aef0168"
+ },
+ "s4-9-5": {
+  "section": "4.9.5",
+  "hash": "70e5489a48cdda79"
  },
  "s4-9-6": {
   "section": "4.9.6",
