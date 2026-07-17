@@ -39,9 +39,9 @@ def load_domain_whitelist():
         return None
     text = open(DOMAIN_LIST, encoding='utf-8').read()
     explicit = set()
-    for m in re.finditer(r'^\|\s*((?:经济|技术|地缘|总纲|社会)/[^\s|]+)\s*\|', text, re.M):
+    for m in re.finditer(r'^\|\s*((?:经济|技术|地缘|总纲|社会|地理)/[^\s|]+)\s*\|', text, re.M):
         explicit.add(m.group(1))
-    for m in re.finditer(r'^-\s*((?:经济|技术|地缘|总纲|社会)/[^\s（(，,]+)', text, re.M):
+    for m in re.finditer(r'^-\s*((?:经济|技术|地缘|总纲|社会|地理)/[^\s（(，,]+)', text, re.M):
         explicit.add(m.group(1))
     return explicit
 
@@ -135,7 +135,7 @@ def main():
 
     # [L] layer 对账（仅 extract 型词条；概念词条无对应清单行）
     for e in entries:
-        sec = (e.get('extract') or '').replace('-intro', '')
+        sec = (e.get('extract') or '').replace('-intro', '').replace('-full', '')
         if not sec or not amap:
             continue
         assigned, probe = None, sec
@@ -170,18 +170,24 @@ def main():
         json.dump(new_lock, open(LOCK, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
         infos.append(f'[D] 哈希基线已更新：{len(new_lock)} 条 → entries.lock.json')
 
-    # [R] 引用分级
-    entried_secs = {e['extract'].replace('-intro', '') for e in entries if e.get('extract')}
+    # [R] 引用分级（事件层扩展：接口声明四字段中的source_text prose也纳入扫描——事件层方法文档v1第2节登记的已知缺口，本轮随事件层批量顺手核销）
+    entried_secs = {e['extract'].replace('-intro', '').replace('-full', '') for e in entries if e.get('extract')}
     for e in entries:
         raw = e['body'] if not e.get('extract') else (extract_section(lines, e['extract']) or '')
-        for m in SEC_REF.finditer(raw):
-            sec = m.group(1)
-            if sec in entried_secs:
-                continue
-            if sec in headings:
-                infos.append(f'[R] {e["id"]} → {sec}节：待切分（清单内，构建时高亮）')
-            else:
-                errors.append(f'[R] {e["id"]} → {sec}节：真悬空（v149 无此节）')
+        texts = [raw]
+        if e.get('type') == '事件':
+            for k in ('mechanism_tested', 'substitutability', 'counter_obligation'):
+                if e.get(k):
+                    texts.append(e[k])
+        for text in texts:
+            for m in SEC_REF.finditer(text):
+                sec = m.group(1)
+                if sec in entried_secs:
+                    continue
+                if sec in headings:
+                    infos.append(f'[R] {e["id"]} → {sec}节：待切分（清单内，构建时高亮）')
+                else:
+                    errors.append(f'[R] {e["id"]} → {sec}节：真悬空（v149 无此节）')
 
     # [V] source 字段可验证性格式校验（D-051③/登记项⑥：summary/overview 的机制判断须可定位回原文）
     for e in entries:

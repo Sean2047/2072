@@ -66,10 +66,16 @@ def load_v149():
     return open(V149, encoding='utf-8').read().split('\n')
 
 def extract_section(lines, sec):
-    """提取节正文（不含标题行）。sec 如 '4.9.1'；'4.9-intro' 表示二级节导语（到首个###为止）。"""
+    """提取节正文（不含标题行）。sec 如 '4.9.1'；'4.9-intro' 表示二级节导语（到首个###为止）；
+    '4.9-full' 表示二级节整节全文（含全部###子节，不在子节处断开，只在下一个同级##处断开）——
+    用于"整节成篇不拆"的技术层词条（如3.7，D-060裁定），extract_section默认逐子节断开，
+    -full后缀是显式的整节抽取模式，不影响其他现有extract写法的行为。"""
     intro = sec.endswith('-intro')
+    full = sec.endswith('-full')
     if intro:
         sec = sec[:-6]
+    if full:
+        sec = sec[:-5]
     # 二级节(X.X)用##；三级(X.X.X)及形式上用###标题的四级编号节(如1.4.4.1)用###
     level = '##' if sec.count('.') == 1 else '###'
     pat = re.compile(r'^%s\s+%s　' % (level, re.escape(sec)))
@@ -82,7 +88,10 @@ def extract_section(lines, sec):
         return None
     out = []
     for l in lines[start:]:
-        if re.match(r'^#{1,3}\s', l):
+        if full:
+            if re.match(r'^##\s', l):
+                break
+        elif re.match(r'^#{1,3}\s', l):
             if intro or not l.startswith('####'):
                 break
         out.append(l)
@@ -262,7 +271,7 @@ def main():
     sec_map = {}
     for e in entries:
         if e.get('extract'):
-            sec_map[e['extract'].replace('-intro', '')] = e['id']
+            sec_map[e['extract'].replace('-intro', '').replace('-full', '')] = e['id']
     alias_map = sorted([(a, e['id']) for e in entries for a in e.get('aliases', [])],
                        key=lambda x: -len(x[0]))
     stats = {'resolved': [], 'unresolved': [], 'term_links': 0, 'term_edges': []}
