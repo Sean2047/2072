@@ -1,0 +1,124 @@
+---
+import Base from '../../layouts/Base.astro';
+import { entries, byId, inbound, VARS, BASE_DOC, url, rewriteLinks } from '../../lib/data.mjs';
+
+export function getStaticPaths() {
+  return entries.map((e) => ({ params: { id: e.id } }));
+}
+
+const { id } = Astro.params;
+const e = byId.get(id);
+
+const bodyHtml = rewriteLinks(e.body_html);
+const overviewHtml = rewriteLinks(e.overview_html);
+const iface = e.interface_html
+  ? Object.fromEntries(Object.entries(e.interface_html).map(([k, v]) => [k, rewriteLinks(v)]))
+  : null;
+
+const isEvent = e.type === '事件' && e.time_span;
+const l3Label = e.type === '章节' || e.type === '事件'
+  ? `完整原文（${BASE_DOC.replace('.md', '')}）`
+  : '词条正文';
+const l3Open = e.type !== '章节';
+
+const children = (e.children || []).map((c) =>
+  c.startsWith('~')
+    ? { missing: true, label: c.slice(1) }
+    : { missing: false, id: c, e: byId.get(c) }
+);
+const related = (e.related || []).filter((r) => byId.has(r)).map((r) => byId.get(r));
+
+// 反向链接：ref（节号引用）/ term（术语链接）/ related（显式声明）三类入边合并展示
+const KIND_LABEL = { ref: '节号引用', term: '术语提及', related: '相关声明' };
+const back = [...(inbound.get(id) || new Map()).entries()]
+  .filter(([src]) => byId.has(src))
+  .map(([src, kinds]) => ({ e: byId.get(src), kinds: [...kinds].map((k) => KIND_LABEL[k]).join('·') }))
+  .sort((a, b) => a.e.id.localeCompare(b.e.id));
+
+const secOf = (x) => (x.extract ? x.extract.replace(/-(intro|full)$/, '') : '');
+---
+<Base title={e.title}>
+  <header class="entry-head">
+    <h1>{e.title}</h1>
+    <div class="badges">
+      <span class={`badge type-${e.type}`}>{e.type}词条</span>
+      <span class="badge layer">{e.layer}层</span>
+      <span class="badge src">{e.source}</span>
+      {(e.paths || []).map((p) => <span class="badge path">{p}</span>)}
+      {(e.variables || []).map((v) => <span class="badge var" title={VARS[v] || ''}>{v}</span>)}
+      <span class="badge dom">{e.domain}</span>
+    </div>
+    {e.note_html && <div class="note">⚠ <Fragment set:html={e.note_html} /></div>}
+  </header>
+
+  <section class="l1">
+    <div class="ltag">一句话摘要</div>
+    <p class="summary"><Fragment set:html={e.summary_html} /></p>
+  </section>
+
+  <section class="l2">
+    <div class="ltag">一段概述</div>
+    <Fragment set:html={overviewHtml} />
+  </section>
+
+  {isEvent && iface && (
+    <section class="interface">
+      <h2>接口声明（事件层：可替换实例）</h2>
+      <dl>
+        <dt>时间位置</dt><dd>{e.time_span}</dd>
+        <dt>演练机制</dt><dd><Fragment set:html={iface.mechanism_tested} /></dd>
+        <dt>可替换性</dt><dd><Fragment set:html={iface.substitutability} /></dd>
+        <dt>反向义务</dt><dd><Fragment set:html={iface.counter_obligation} /></dd>
+      </dl>
+    </section>
+  )}
+
+  <details class="l3" open={l3Open}>
+    <summary>{l3Label}</summary>
+    <div class="prose"><Fragment set:html={bodyHtml} /></div>
+  </details>
+
+  {children.length > 0 && (
+    <section class="children">
+      <h2>本节词条</h2>
+      <ul>
+        {children.map((c) =>
+          c.missing ? (
+            <li class="missing">{c.label} <span class="tag">未收录</span></li>
+          ) : (
+            <li>
+              <a class="entry-link" href={url(`/entries/${c.id}/`)} data-id={c.id}>
+                {secOf(c.e)}　{c.e.title}
+              </a>
+              <span class="csum">{c.e.summary}</span>
+            </li>
+          )
+        )}
+      </ul>
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section class="related">
+      <h2>相关词条</h2>
+      <div class="chips">
+        {related.map((r) => (
+          <a class="entry-link chip" href={url(`/entries/${r.id}/`)} data-id={r.id}>{r.title}</a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {back.length > 0 && (
+    <section class="backlinks">
+      <h2>反向链接（引用了本词条）</h2>
+      <div class="chips">
+        {back.map((b) => (
+          <a class="entry-link chip" href={url(`/entries/${b.e.id}/`)} data-id={b.e.id}>
+            {b.e.title}<span class="kind">{b.kinds}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</Base>

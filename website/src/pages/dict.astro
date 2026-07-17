@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { jianyu, byId, secMap, url } from '../lib/data.mjs';
+
+// jianyu.json 由 check_entries.py [J] 项从词条层自动重生成（词典"见于"列的构建时形态）
+const rows = Object.entries(jianyu)
+  .map(([id, r]) => ({
+    id,
+    title: r.title,
+    aliases: (r.aliases || []).filter((a) => a !== r.title),
+    seen: (r.seen_in || []).map((sec) => ({ sec, target: secMap.get(sec) || null })),
+  }))
+  .sort((a, b) => a.id.localeCompare(b.id));
+---
+<Base title="关键字词典" active="dict">
+  <div class="hero">
+    <h1>关键字词典</h1>
+    <p class="sub">{rows.length} 个术语，全部已承接为概念词条。"见于"列由构建自动重生成（check_entries.py [J] 项），节号链接指向对应章节词条。</p>
+  </div>
+
+  <table class="dict-table">
+    <thead>
+      <tr><th>术语</th><th>别名</th><th>见于</th></tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => (
+        <tr>
+          <td><a class="entry-link" href={url(`/entries/${r.id}/`)} data-id={r.id}>{r.title}</a></td>
+          <td class="aliases">{r.aliases.join('、')}</td>
+          <td class="seen">
+            {r.seen.map((s) =>
+              s.target ? (
+                <a class="entry-link" href={url(`/entries/${s.target}/`)} data-id={s.target}>{s.sec}</a>
+              ) : (
+                <span class="noentry" title="该节未收录为词条">{s.sec}</span>
+              )
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</Base>

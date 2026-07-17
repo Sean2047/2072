@@ -1,0 +1,65 @@
+# 2072 知识库自动构建部署（D-051①：Astro + GitHub Actions → GitHub Pages）
+# 流程：build.py（词条解析+entries.json）→ check_entries.py（校验闸门，词条问题即失败）→ astro build → Pages
+# 首次启用：GitHub 仓库 Settings → Pages → Source 选 "GitHub Actions"。
+name: deploy-site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 词条解析与数据导出（build.py）
+        run: python3 website_prototype/build.py
+
+      - name: 词条校验闸门 + 见于表（check_entries.py）
+        run: python3 website_prototype/check_entries.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: 安装依赖
+        working-directory: website
+        run: npm ci
+
+      - name: Astro 构建
+        working-directory: website
+        run: npm run build
+        env:
+          ASTRO_BASE: /2072
+          ASTRO_SITE: https://sean2047.github.io
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

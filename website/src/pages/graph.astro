@@ -1,0 +1,216 @@
+---
+import Base from '../layouts/Base.astro';
+import { graph, url } from '../lib/data.mjs';
+
+const nodes = graph.nodes.map((n) => ({ id: n.id, title: n.title, type: n.type, layer: n.layer }));
+const edges = graph.edges;
+const entryPrefix = url('/entries/');
+---
+<Base title="知识图谱" active="graph">
+  <div class="hero">
+    <h1>知识图谱</h1>
+    <p class="sub">{nodes.length} 节点 · {edges.length} 边（ref=节号引用 / term=术语链接 / related=显式声明 / child=索引子项）。拖拽平移，滚轮缩放，点击节点进入词条。</p>
+  </div>
+
+  <div class="graph-controls">
+    <span>边：</span>
+    <label><input type="checkbox" data-kind="ref" checked /> 节号引用</label>
+    <label><input type="checkbox" data-kind="related" checked /> 显式相关</label>
+    <label><input type="checkbox" data-kind="child" checked /> 索引子项</label>
+    <label><input type="checkbox" data-kind="term" /> 术语链接（量大）</label>
+    <span style="margin-left:12px">节点：</span>
+    <label><input type="checkbox" data-nf="理论" checked /> 理论</label>
+    <label><input type="checkbox" data-nf="技术" checked /> 技术</label>
+    <label><input type="checkbox" data-nf="事件" checked /> 事件</label>
+    <label><input type="checkbox" data-nf="概念" checked /> 概念</label>
+  </div>
+
+  <div id="graph-wrap">
+    <canvas id="graph-canvas"></canvas>
+    <div id="graph-tip" hidden></div>
+  </div>
+  <div class="graph-legend">
+    颜色<span class="dot" style="background:#1a5fb4"></span>理论层
+    <span class="dot" style="background:#217a3c"></span>技术层
+    <span class="dot" style="background:#b4541a"></span>事件层
+    <span class="dot" style="background:#6d28d9"></span>概念词条 · 节点大小=入边数
+  </div>
+
+  <script define:vars={{ nodes, edges, entryPrefix }}>
+    (function () {
+      const canvas = document.getElementById('graph-canvas');
+      const wrap = document.getElementById('graph-wrap');
+      const tip = document.getElementById('graph-tip');
+      const ctx = canvas.getContext('2d');
+      const DPR = window.devicePixelRatio || 1;
+
+      const COLOR = { 理论: '#1a5fb4', 技术: '#217a3c', 事件: '#b4541a', 概念: '#6d28d9' };
+      const EDGE_COLOR = { ref: 'rgba(26,95,180,.25)', term: 'rgba(109,40,217,.10)', related: 'rgba(138,90,43,.35)', child: 'rgba(33,122,60,.25)' };
+
+      const idx = new Map();
+      nodes.forEach((n, i) => idx.set(n.id, i));
+      const deg = new Array(nodes.length).fill(0);
+      edges.forEach((e) => { const t = idx.get(e.to); if (t !== undefined) deg[t]++; });
+
+      // 初始位置：环形分层
+      const N = nodes.length;
+      nodes.forEach((n, i) => {
+        const a = (i / N) * Math.PI * 2;
+        const r = 200 + (i % 7) * 60;
+        n.x = Math.cos(a) * r; n.y = Math.sin(a) * r;
+        n.vx = 0; n.vy = 0;
+        n.color = n.type === '概念' ? COLOR['概念'] : (COLOR[n.layer] || '#6b7280');
+        n.r = 3 + Math.min(9, Math.sqrt(deg[i]) * 1.4);
+        n.cat = n.type === '概念' ? '概念' : n.layer;
+      });
+
+      let kinds = new Set(['ref', 'related', 'child']);
+      let cats = new Set(['理论', '技术', '事件', '概念']);
+      let activeEdges = [];
+      function rebuildEdges() {
+        activeEdges = edges
+          .map((e) => ({ s: idx.get(e.from), t: idx.get(e.to), kind: e.kind }))
+          .filter((e) => e.s !== undefined && e.t !== undefined && kinds.has(e.kind)
+            && cats.has(nodes[e.s].cat) && cats.has(nodes[e.t].cat));
+        alpha = Math.max(alpha, 0.3);
+      }
+
+      let scale = 0.7, ox = 0, oy = 0, alpha = 1;
+
+      function resize() {
+        const w = wrap.clientWidth, h = canvas.clientHeight || wrap.clientWidth * 0.62;
+        canvas.width = w * DPR; canvas.height = h * DPR;
+        ox = w / 2; oy = h / 2;
+      }
+      resize();
+      window.addEventListener('resize', () => { resize(); });
+
+      function tick() {
+        if (alpha > 0.005) {
+          // 斥力（网格近似省略——n≈465 直接 O(n²)）
+          for (let i = 0; i < N; i++) {
+            const a = nodes[i];
+            if (!cats.has(a.cat)) continue;
+            for (let j = i + 1; j < N; j++) {
+              const b = nodes[j];
+              if (!cats.has(b.cat)) continue;
+              let dx = a.x - b.x, dy = a.y - b.y;
+              let d2 = dx * dx + dy * dy + 0.01;
+              if (d2 > 40000) continue;
+              const f = 400 / d2;
+              dx *= f; dy *= f;
+              a.vx += dx; a.vy += dy; b.vx -= dx; b.vy -= dy;
+            }
+          }
+          // 引力（沿边）
+          for (const e of activeEdges) {
+            const a = nodes[e.s], b = nodes[e.t];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const d = Math.sqrt(dx * dx + dy * dy) + 0.01;
+            const f = (d - 60) * 0.002;
+            a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
+          }
+          for (const n of nodes) {
+            n.vx -= n.x * 0.0004; n.vy -= n.y * 0.0004; // 向心
+            n.x += n.vx * alpha * 6; n.y += n.vy * alpha * 6;
+            n.vx *= 0.5; n.vy *= 0.5;
+          }
+          alpha *= 0.985;
+        }
+        draw();
+        requestAnimationFrame(tick);
+      }
+
+      let hover = null;
+      function draw() {
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(ox, oy);
+        ctx.scale(scale, scale);
+        for (const e of activeEdges) {
+          const a = nodes[e.s], b = nodes[e.t];
+          ctx.strokeStyle = EDGE_COLOR[e.kind];
+          ctx.lineWidth = 1 / scale;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+        for (const n of nodes) {
+          if (!cats.has(n.cat)) continue;
+          ctx.fillStyle = n.color;
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+          if (n === hover) {
+            ctx.strokeStyle = '#1f2328'; ctx.lineWidth = 2 / scale; ctx.stroke();
+          }
+        }
+        if (scale > 1.6) {
+          ctx.fillStyle = '#1f2328';
+          ctx.font = `${11 / scale}px "PingFang SC", sans-serif`;
+          for (const n of nodes) {
+            if (!cats.has(n.cat)) continue;
+            ctx.fillText(n.title, n.x + n.r + 2, n.y + 3 / scale);
+          }
+        }
+      }
+
+      function pick(mx, my) {
+        const x = (mx - ox) / scale, y = (my - oy) / scale;
+        let best = null, bd = 1e9;
+        for (const n of nodes) {
+          if (!cats.has(n.cat)) continue;
+          const dx = n.x - x, dy = n.y - y, d = dx * dx + dy * dy;
+          if (d < (n.r + 4) * (n.r + 4) && d < bd) { best = n; bd = d; }
+        }
+        return best;
+      }
+
+      let dragging = false, lx = 0, ly = 0, moved = false;
+      canvas.addEventListener('mousedown', (ev) => { dragging = true; moved = false; lx = ev.offsetX; ly = ev.offsetY; canvas.classList.add('dragging'); });
+      window.addEventListener('mouseup', () => { dragging = false; canvas.classList.remove('dragging'); });
+      canvas.addEventListener('mousemove', (ev) => {
+        if (dragging) {
+          ox += ev.offsetX - lx; oy += ev.offsetY - ly;
+          lx = ev.offsetX; ly = ev.offsetY; moved = true;
+          return;
+        }
+        hover = pick(ev.offsetX, ev.offsetY);
+        if (hover) {
+          tip.hidden = false;
+          tip.textContent = hover.title + '（' + hover.type + '·' + hover.layer + '层）';
+          tip.style.left = ev.offsetX + 14 + 'px';
+          tip.style.top = ev.offsetY + 10 + 'px';
+          canvas.style.cursor = 'pointer';
+        } else {
+          tip.hidden = true;
+          canvas.style.cursor = dragging ? 'grabbing' : 'grab';
+        }
+      });
+      canvas.addEventListener('click', (ev) => {
+        if (moved) return;
+        const n = pick(ev.offsetX, ev.offsetY);
+        if (n) location.href = entryPrefix + n.id + '/';
+      });
+      canvas.addEventListener('wheel', (ev) => {
+        ev.preventDefault();
+        const k = ev.deltaY < 0 ? 1.15 : 0.87;
+        const mx = ev.offsetX, my = ev.offsetY;
+        ox = mx - (mx - ox) * k; oy = my - (my - oy) * k;
+        scale *= k;
+      }, { passive: false });
+
+      document.querySelectorAll('.graph-controls input[data-kind]').forEach((cb) => {
+        cb.addEventListener('change', () => {
+          cb.checked ? kinds.add(cb.dataset.kind) : kinds.delete(cb.dataset.kind);
+          rebuildEdges();
+        });
+      });
+      document.querySelectorAll('.graph-controls input[data-nf]').forEach((cb) => {
+        cb.addEventListener('change', () => {
+          cb.checked ? cats.add(cb.dataset.nf) : cats.delete(cb.dataset.nf);
+          rebuildEdges();
+        });
+      });
+
+      rebuildEdges();
+      tick();
+    })();
+  </script>
+</Base>

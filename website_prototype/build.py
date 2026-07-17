@@ -351,6 +351,33 @@ def main():
     with open(os.path.join(OUT, 'graph.json'), 'w', encoding='utf-8') as f:
         json.dump(graph, f, ensure_ascii=False, indent=1)
 
+    # ---------- entries.json：Astro 渲染层数据出口（2026-07-17，网站化落地 D-051①） ----------
+    # 原则：build.py 仍是唯一解析器（extract/-full/-intro、节号链接、术语链接、反向链接），
+    # Astro 只消费本文件做渲染，不重写任何解析逻辑。链接保持 "<id>.html" 形式，由 Astro 端统一改写为站内路由。
+    export = []
+    for e in entries:
+        item = {k: e.get(k) for k in ('id', 'title', 'type', 'layer', 'source', 'extract',
+                                       'paths', 'domain', 'variables', 'aliases', 'related',
+                                       'children', 'note', 'time_span')}
+        item['summary'] = e['summary']
+        item['summary_html'] = inline_md(e['summary'])
+        item['overview_html'] = md_to_html(e['overview'])
+        item['note_html'] = inline_md(e['note']) if e.get('note') else None
+        item['body_html'] = bodies[e['id']]
+        if e['id'] in ifaces:
+            item['interface_html'] = ifaces[e['id']]
+        item['backlinks'] = sorted(backlinks.get(e['id'], set()))
+        export.append(item)
+    entries_json = {
+        'built_from': f'entries/*.md + {os.path.basename(V149)}（构建产物，勿手工编辑；链接为 <id>.html 形式，渲染层负责改写路由）',
+        'base_doc': os.path.basename(V149),
+        'vars': VARS,
+        'entries': export,
+        'unresolved_refs': graph['unresolved_refs'],
+    }
+    with open(os.path.join(OUT, 'entries.json'), 'w', encoding='utf-8') as f:
+        json.dump(entries_json, f, ensure_ascii=False, indent=1)
+
     import sqlite3, tempfile, shutil
     dbp = os.path.join(OUT, 'entries.db')
     tmp = os.path.join(tempfile.gettempdir(), 'entries_build.db')  # 挂载盘不支持 SQLite 锁，先本地建库再拷回

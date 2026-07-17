@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import { entries, BASE_DOC, url } from '../lib/data.mjs';
+
+const layers = [...new Set(entries.map((e) => e.layer))].sort();
+const types = [...new Set(entries.map((e) => e.type))].sort();
+const paths = [...new Set(entries.flatMap((e) => e.paths || []))].sort();
+const vars_ = [...new Set(entries.flatMap((e) => e.variables || []))].sort();
+const domains = [...new Set(entries.map((e) => e.domain).filter(Boolean))].sort();
+
+const cardData = entries.map((e) => ({
+  ...e,
+  tags: [
+    `t-${e.type}`, `l-${e.layer}`,
+    ...(e.paths || []).map((p) => `p-${p}`),
+    ...(e.variables || []).map((v) => `v-${v}`),
+  ].join(' '),
+  search: [e.title, e.summary, ...(e.aliases || []), e.domain, e.extract || '']
+    .join(' ')
+    .toLowerCase(),
+  sec: e.extract ? e.extract.replace(/-(intro|full)$/, '') : '',
+}));
+---
+<Base title="词条总览" active="index">
+  <header class="hero">
+    <h1>《2072》知识库</h1>
+    <p class="sub">
+      理论 / 技术 / 事件 / 概念四层词条 · 双向链接 · 悬停预览 · 三层渐进披露。
+      {entries.length} 个词条，正文按节号构建时从 {BASE_DOC.replace('.md', '')} 提取，内容零改写。
+    </p>
+  </header>
+
+  <input id="q" class="searchbox" type="search" placeholder="搜索标题 / 摘要 / 别名 / 节号…" />
+
+  <div class="filters">
+    <div class="fgroup"><span class="flabel">层</span>
+      {layers.map((v) => <button class="fchip" data-f={`l-${v}`}>{v}</button>)}
+    </div>
+    <div class="fgroup"><span class="flabel">类型</span>
+      {types.map((v) => <button class="fchip" data-f={`t-${v}`}>{v}</button>)}
+    </div>
+    <div class="fgroup"><span class="flabel">路径</span>
+      {paths.map((v) => <button class="fchip" data-f={`p-${v}`}>{v}</button>)}
+    </div>
+    <div class="fgroup"><span class="flabel">变量</span>
+      {vars_.map((v) => <button class="fchip" data-f={`v-${v}`}>{v}</button>)}
+    </div>
+    <div class="fgroup"><span class="flabel">领域</span>
+      <select id="domsel" class="fsel">
+        <option value="">全部</option>
+        {domains.map((d) => <option value={d}>{d}</option>)}
+      </select>
+    </div>
+    <button class="fchip clear" data-f="">清除筛选</button>
+  </div>
+  <div class="count" id="count"></div>
+
+  <div class="grid" id="grid">
+    {cardData.map((e) => (
+      <a
+        class={`card ${e.tags}`}
+        href={url(`/entries/${e.id}/`)}
+        data-domain={e.domain}
+        data-search={e.search}
+      >
+        <div class="card-top">
+          <span class={`badge type-${e.type}`}>{e.type}</span>
+          <span class="src">{e.sec || e.layer + '层'}</span>
+        </div>
+        <h3>{e.title}</h3>
+        <p>{e.summary}</p>
+      </a>
+    ))}
+  </div>
+
+  <script>
+    // 多维筛选（同组=或，跨组=与）+ 领域下拉 + 全文搜索（零依赖）
+    const active = new Set();
+    const chips = document.querySelectorAll('.fchip');
+    const cards = document.querySelectorAll('.card');
+    const q = document.getElementById('q');
+    const domsel = document.getElementById('domsel');
+    const count = document.getElementById('count');
+
+    function apply() {
+      const groups = new Map();
+      active.forEach((f) => {
+        const g = f.split('-')[0];
+        if (!groups.has(g)) groups.set(g, []);
+        groups.get(g).push(f);
+      });
+      const term = q.value.trim().toLowerCase();
+      const dom = domsel.value;
+      let shown = 0;
+      cards.forEach((c) => {
+        let ok = true;
+        groups.forEach((fs) => {
+          if (!fs.some((f) => c.classList.contains(f))) ok = false;
+        });
+        if (ok && dom && c.dataset.domain !== dom) ok = false;
+        if (ok && term && !c.dataset.search.includes(term)) ok = false;
+        c.classList.toggle('hidden', !ok);
+        if (ok) shown++;
+      });
+      count.textContent = `显示 ${shown} / ${cards.length} 个词条`;
+    }
+    chips.forEach((ch) => {
+      ch.addEventListener('click', () => {
+        const f = ch.dataset.f;
+        if (!f) {
+          active.clear();
+          chips.forEach((c) => c.classList.remove('active'));
+          q.value = '';
+          domsel.value = '';
+          apply();
+          return;
+        }
+        if (active.has(f)) { active.delete(f); ch.classList.remove('active'); }
+        else { active.add(f); ch.classList.add('active'); }
+        apply();
+      });
+    });
+    q.addEventListener('input', apply);
+    domsel.addEventListener('change', apply);
+    apply();
+  </script>
+</Base>

@@ -1,0 +1,71 @@
+---
+import { entries, BASE_DOC, url } from '../lib/data.mjs';
+import '../styles/global.css';
+const { title, active = '' } = Astro.props;
+const dataUrl = url('/data.json');
+const nav = [
+  { href: url('/'), key: 'index', label: '词条总览' },
+  { href: url('/graph/'), key: 'graph', label: '知识图谱' },
+  { href: url('/dict/'), key: 'dict', label: '关键字词典' },
+];
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title ? `${title} · 2072 知识库` : '2072 知识库'}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <nav class="top">
+      <div class="navlinks">
+        {nav.map((n) => (
+          <a href={n.href} class={active === n.key ? 'active' : ''}>{n.label}</a>
+        ))}
+      </div>
+      <span class="proto">《2072》知识库 · {entries.length} 词条 · 基准 {BASE_DOC.replace('.md', '')}</span>
+    </nav>
+    <main><slot /></main>
+    <div id="tooltip" hidden></div>
+    <script define:vars={{ dataUrl }}>
+      // 悬停预览：首次悬停时惰性拉取词条摘要数据（零依赖，沿用原型交互）
+      (function () {
+        var tip = document.getElementById('tooltip');
+        var DB = null, loading = false;
+        function ensure(cb) {
+          if (DB) return cb();
+          if (loading) return;
+          loading = true;
+          fetch(dataUrl).then(function (r) { return r.json(); }).then(function (j) { DB = j; cb(); });
+        }
+        document.addEventListener('mouseover', function (ev) {
+          var a = ev.target.closest && ev.target.closest('a.entry-link');
+          if (!a || !tip || !a.dataset.id) return;
+          ensure(function () {
+            var e = DB[a.dataset.id];
+            if (!e) return;
+            tip.innerHTML = '<div class="t-title">' + e.title +
+              '<span class="t-type">' + e.type + '词条</span></div>' +
+              '<div class="t-sum">' + e.summary + '</div>';
+            tip.hidden = false;
+            var r = a.getBoundingClientRect();
+            var x = Math.min(r.left, window.innerWidth - 360);
+            var y = r.bottom + 8;
+            if (y + tip.offsetHeight > window.innerHeight) y = r.top - tip.offsetHeight - 8;
+            tip.style.left = Math.max(8, x) + 'px';
+            tip.style.top = y + 'px';
+          });
+        });
+        document.addEventListener('mouseout', function (ev) {
+          if (ev.target.closest && ev.target.closest('a.entry-link') && tip) tip.hidden = true;
+        });
+      })();
+    </script>
+  </body>
+</html>
