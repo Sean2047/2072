@@ -370,6 +370,11 @@ def main():
         item['summary'] = e['summary']
         item['summary_html'] = inline_md(e['summary'])
         item['overview_html'] = md_to_html(e['overview'])
+        # 英文层（D-070 双语同推）：三字段可缺（未翻译词条为 None），渲染层据此回退中文
+        item['title_en'] = e.get('title_en') or None
+        item['summary_en'] = e.get('summary_en') or None
+        item['summary_en_html'] = inline_md(e['summary_en']) if e.get('summary_en') else None
+        item['overview_en_html'] = md_to_html(e['overview_en']) if e.get('overview_en') else None
         item['note_html'] = inline_md(e['note']) if e.get('note') else None
         item['body_html'] = bodies[e['id']]
         if e['id'] in ifaces:

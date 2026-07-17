@@ -11,6 +11,10 @@ related: s1-1, s1-1-1, geti-buquedingxing
 summary: 描述群体层面统计规律与结构趋势的方法论原则——解释力量场的形态，不规定个体命运。
 overview: |
   统计理性用概率和趋势描述群体层面的力量场：相互忽视均衡的稳固性、生育率下行方向、动员意愿的系统性降低、多态稳定的形成机制。这类描述说的是力量场的形态，不是每个个体的命运，与个体不确定性共同构成全文方法论的核心原则，贯穿所有社会图景描述。
+title_en: Statistical Rationality
+summary_en: The methodological principle of describing group-level statistical regularities and structural trends — it explains the shape of the force field without dictating individual fates.
+overview_en: |
+  Statistical Rationality describes group-level force fields in probabilities and trends: the durability of the Mutual Disregard Equilibrium, the downward direction of fertility, the systematic decline of mobilization willingness, the formation of Polymorphic Stability. Such description concerns the field's shape, not any individual's fate; together with Individual Uncertainty it forms the methodological core running through all social-landscape description.
 ---
 **词典定义（v156 关键字词典，原文）**
 

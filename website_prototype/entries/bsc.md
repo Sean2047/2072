@@ -12,6 +12,10 @@ related: gongying-piaoju, s4-9-1, s4-9-6, luoluqi
 summary: A1体系基础保障的载体——定向积分覆盖基本生存品类，是政治妥协的产物而非最优设计的输出。
 overview: |
   BSC（Basic Support Credits）是A1体系社会保障的一种具体实现形式，以积分为载体覆盖食品、医疗、住房、教育、交通等基本需求。相比UBI现金直发，定向积分在政治上更易通过；相比传统实物配给，品类内自选保留了自由主义原则。积分只是工具，跨社区分析的核心变量是"社会保障覆盖生活成本比例"。2052—2055年BSC覆盖基本生存是A1体系L3制度响应的物质标志。
+title_en: Basic Support Credits (BSC)
+summary_en: The carrier of baseline protection in the A1 system — targeted credits covering basic-subsistence categories, the product of political compromise rather than optimal design.
+overview_en: |
+  Basic Support Credits are one concrete implementation of A1 social protection, covering food, medical care, housing, education, and transport. Against UBI-style cash, targeted credits pass more easily politically; against traditional in-kind rationing, free choice within categories preserves the liberal principle. The credits are only an instrument — the core variable for cross-community analysis is the Coverage-to-Living-Cost Ratio. BSC covering basic subsistence in 2052–2055 is the material marker of the A1 system's L3 institutional response.
 ---
 **词典定义（v149 关键字词典，原文）**
 

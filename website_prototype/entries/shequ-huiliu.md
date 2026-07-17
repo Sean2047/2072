@@ -12,6 +12,10 @@ related: s1-2-2, s1-4-2
 summary: 人口从高度流动状态回到更稳定的地方生活结构——是多态社会形成的关键中介，而非单纯的文化保守化。
 overview: |
   社区回流是链B（流动衰退）的最终结果状态：跨地域流动收益下降使本地关系网络相对升值，人口逐步回流地方社区，社区重新成为基础组织单位。这一过程不是价值观驱动的文化保守化选择，而是成本收益计算的理性结果——机制不依赖任何人的主动推动，也不依赖信息隔离。
+title_en: Community Return
+summary_en: Population moves from high mobility back into more stable local structures of life — the key intermediary in the Polymorphic Society's formation, not mere cultural conservatism.
+overview_en: |
+  Community Return is the end state of Chain B (Mobility Decline): falling returns to cross-regional migration make local relationship networks appreciate relatively, population flows back, and the community again becomes the basic organizational unit. The process is not a values-driven conservative turn but the rational outcome of cost-benefit calculation — the mechanism requires no one's active promotion and no information isolation.
 ---
 **词典定义（v156 关键字词典，原文）**
 

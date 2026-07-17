@@ -11,6 +11,10 @@ related: s1-4-6, jubian-guojia
 summary: 在岗位萎缩背景下被用作人人有去处的制度解，缓冲青年失序，延缓劳动市场冲击的即时政治后果。
 overview: |
   聚变国家在2044—2060年代陆续推进免费高等教育，直接经济动机是为失业青年提供结构化时间出口，政治动机是以人力资本投资的叙事包装隐性再分配。其精神塑造效果（认知化解——系统性社科训练使受教育人口能理解自身处境从而降低动员意愿）是真实的副产品，但覆盖面有严格代际边界，2090—2100年才能完成代际替换，对相互忽视均衡是加固因素而非主要承重层。
+title_en: Free Higher Education
+summary_en: Deployed as the everyone-has-somewhere-to-go institutional solution amid job shrinkage, buffering youth disorder and postponing the immediate political consequences of the labor shock.
+overview_en: |
+  Fusion States roll out free higher education across the 2044–2060s; the direct economic motive is a structured time outlet for unemployed youth, the political motive a redistribution wrapped in human-capital narrative. Its mind-shaping effect — cognitive defusing, as systematic social-science training lets the educated understand their own situation and lowers mobilization willingness — is a real byproduct, but coverage has strict generational bounds; replacement completes only by 2090–2100, making it a reinforcing rather than load-bearing factor for the Mutual Disregard Equilibrium.
 ---
 **词典定义（v156 关键字词典，原文）**
 

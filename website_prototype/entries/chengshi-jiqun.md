@@ -11,6 +11,10 @@ related: s1-4-2, s1-4-4-1
 summary: 基础设施、人口与高端生产能力高度集聚的节点区域，在新技术时代继续吸纳资源，但未必继续吸纳所有人口。
 overview: |
   运输成本决定了哪些地方能融入城市集群，与这一物质供给来源的距离直接塑造社区的资源丰度与生活形态。城市集群里被视为正常的生活方式选择，在高内聚的慢生活社区可能面临持续的社会摩擦——城市集群与退出社区、慢生活社区并非对立关系，而是同一空间分化过程的不同结果。
+title_en: Urban Clusters
+summary_en: Node regions of highly concentrated infrastructure, population, and high-end productive capacity; they continue to absorb resources in the new technological era, but not necessarily all of the population.
+overview_en: |
+  Transport costs decide which places can join urban clusters, and distance from this material supply source directly shapes a community's resource abundance and form of life. Lifestyle choices considered normal inside a cluster may meet persistent social friction in high-cohesion slow-living communities — clusters, Post-Employment Communities, and Slow Communities are not opposites but different outcomes of a single process of spatial divergence.
 ---
 **词典定义（v156 关键字词典，原文）**
 

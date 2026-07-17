@@ -11,6 +11,10 @@ related: s1-2-4, s5-6
 summary: 共享民主价值、深度整合于A1体系，民主制度本身提供内生的政策自主性，自主空间不因体量而异。
 overview: |
   B1类包括部分城邦型高密度经济体（如新加坡、阿联酋）。与B2类的关键区别在于：B1的整合以共享民主价值为基础，制度自主性由民主程序内生提供，不像B2那样因技术—经济—政治网络的深度嵌入而丧失自主空间。欧洲与民主东亚是B1类的两种典型形态。
+title_en: B1: Democratic-System Integrators
+summary_en: Economies sharing democratic values and deeply integrated with the A1 system; democratic institutions themselves supply endogenous policy autonomy, and that autonomy does not vary with size.
+overview_en: |
+  B1 includes several city-state-type high-density economies (such as Singapore and the UAE). The key difference from B2: B1 integration rests on shared democratic values, and institutional autonomy is generated internally by democratic procedure, rather than being lost through deep embedding in a technological-economic-political network as in B2. Europe and democratic East Asia are B1's two typical forms.
 ---
 **词典定义（v156 关键字词典，原文）**
 

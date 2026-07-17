@@ -11,6 +11,10 @@ related: s1-2, duotai-wending, duotai-fenhua
 summary: AI深化与能源约束缓解后，未来不再收敛为单一现代性，而是多条路径并存、系统稳定但个体高痛苦的社会形态。
 overview: |
   多态社会是全文理论内核的压缩表述：在AI深化、自动化饱和、能源约束显著缓解之后，人类社会进入多路径分化、系统可稳定、个体心理适应过程持续展开的状态——既非乌托邦，也非末日。核心组件为八个核心变量（V1–V8）、六条主因果链（A–F）、模型失效条件与七类世界经济角色参照框架。
+title_en: Polymorphic Society
+summary_en: After AI deepening and the easing of energy constraints, the future no longer converges on a single modernity: multiple paths coexist, systems are stable, and individual pain runs high.
+overview_en: |
+  Polymorphic Society is the compressed statement of the document's theoretical core: after AI deepening, Automation Saturation, and the marked easing of energy constraints, human society enters a state of multi-path divergence, stabilizable systems, and continuing individual psychological adjustment — neither utopia nor apocalypse. Its core components are the eight variables (V1–V8), the six causal chains (A–F), the model failure conditions, and the seven-type reference frame of world economic roles.
 ---
 **词典定义（v156 关键字词典，原文）**
 

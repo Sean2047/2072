@@ -11,6 +11,10 @@ related: s1-1, s1-1-1, tongji-lixing, jiegou-jueding-kenengxing-kongjian
 summary: 具体人物在结构约束下仍可做出统计无法预测的选择，保证叙事人物不是世界观的附属物。
 overview: |
   群体层面的统计描述从未声称覆盖所有个体，统计之外的人不是世界观的反例，而是世界观本就不应覆盖的部分。个体不确定性保证了叙事人物能在结构框架内生成真实行动，而不是被结构决定论化约为力量场的傀儡——这是宏观世界观文件与中观叙事文本得以分工又不互相取消的方法论前提。
+title_en: Individual Uncertainty
+summary_en: Concrete persons can still make choices statistics cannot predict within structural constraints, guaranteeing that narrative characters are not appendages of the worldbuilding.
+overview_en: |
+  Statistical description at the group level never claimed to cover every individual; people outside the statistics are not counterexamples to the worldview but the part it was never meant to cover. Individual Uncertainty guarantees that narrative characters can generate real action inside the structural frame instead of being reduced by structural determinism to puppets of a force field — the methodological premise on which the macro worldview document and meso narrative texts divide labor without canceling each other.
 ---
 **词典定义（v156 关键字词典，原文）**
 

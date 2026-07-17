@@ -12,6 +12,10 @@ related: s2-3-1, s4-4-1
 summary: 电力生产全周期的平均成本指标，用于比较不同发电技术的经济性，聚变LCOE下降是能源格局重排的核心量化指标。
 overview: |
   聚变LCOE从约60–100美元/MWh（L1，2044电网上线）降至约20–35美元/MWh（L2，2049–2059，开始与成熟光伏竞争）、最终降至约8–15美元/MWh（L4，2060年代后，能源变为背景性基础设施成本）。聚变的竞争优势不是最低价，而是90%以上利用率的基荷稳定性，这是光伏无法提供的。
+title_en: Levelized Cost of Electricity (LCOE)
+summary_en: The average full-lifecycle cost of electricity production, used to compare generating technologies; falling fusion LCOE is the core quantitative index of the energy reordering.
+overview_en: |
+  Fusion LCOE falls from roughly $60–100/MWh (L1, 2044 grid connection) to $20–35/MWh (L2, 2049–2059, beginning to compete with mature solar) and finally $8–15/MWh (L4, post-2060s, energy as background infrastructure cost). Fusion's edge is not the lowest price but baseload stability at over 90% utilization — which solar cannot supply.
 ---
 **词典定义（v156 关键字词典，原文）**
 

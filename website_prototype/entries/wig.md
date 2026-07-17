@@ -11,6 +11,10 @@ related: s3-15-2, saf
 summary: 利用地面效应低空飞行的大型运载工具，适用于跨洋大宗货物速度层，介于传统货船与航空之间。
 overview: |
   WIG在2–20米高度利用近水面气动增升效应，所需升力功率仅为同等速度普通飞机的30–50%，商业主力型速度280–420km/h，燃料为合成航煤（SAF）。电子元件、医疗物资等聚变前依赖空运的中高附加值货物大部分转入WIG，跨洲际大宗低值货物仍由传统货轮承担。
+title_en: Wing-in-Ground-Effect Craft (WIG)
+summary_en: Large carriers flying low on ground effect, serving the speed layer of transoceanic bulk cargo between conventional shipping and aviation.
+overview_en: |
+  WIG craft exploit near-surface aerodynamic lift at 2–20 meters, needing only 30–50% of the lift power of an aircraft at equal speed; commercial mainline types run 280–420 km/h on synthetic jet fuel (SAF). Most mid-to-high-value cargo that depended on air freight before fusion — electronics, medical supplies — shifts to WIG, while low-value transcontinental bulk stays with conventional ships.
 ---
 **词典定义（v156 关键字词典，原文）**
 

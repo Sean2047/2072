@@ -12,6 +12,10 @@ related: s1-7-2
 summary: 将精神健康、情绪稳定与社会参与纳入管理逻辑后的幸福形式，重点不是深层自由，而是维持可运转、可承受、可持续。
 overview: |
   A2路径精神健康挑战被纳入社会管理框架，形成社区层面的正向叙事建构、AI辅助的情绪监测系统、通过参与社区项目提供结构性活动。这套系统的效率在于它不否认个体痛苦，而是提供通道将痛苦转化为社区贡献的动力，代价是真正的内在处理被功能性适应替代，心理脆弱性并未被消除，只是被管理。
+title_en: Functional Wellbeing
+summary_en: The form happiness takes once mental health, emotional stability, and social participation are folded into a management logic; the point is not deep freedom but keeping life workable, bearable, and sustainable.
+overview_en: |
+  On the A2 path mental-health challenges are absorbed into the social-management framework: community-level positive narrative construction, AI-assisted mood monitoring, and structured activity through community projects. The system's efficiency lies in not denying individual pain but providing channels that convert it into motive force for community contribution; the cost is that genuine inner processing is replaced by functional adaptation — psychological fragility is not removed, only managed.
 ---
 **词典定义（v156 关键字词典，原文）**
 

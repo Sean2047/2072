@@ -11,6 +11,10 @@ related: s1-2-2, s2-3-1
 summary: 聚变、AI与自动化成熟后不再被日常感知为突破，而是退到背景层——社会问题的中心转向如何活着。
 overview: |
   链F描述的是感知层面的转变而非物质层面的变化：技术从新闻变为背景，标志聚变主线L4阶段完成（能源充裕从新闻变为背景），也标志AI主线的自动化饱和——新增替代不再被视为新闻，而成为社会运行的默认背景。技术背景化之后，社会讨论的焦点从“技术能做什么”转向“人如何在技术已经解决了物质问题的世界里活着”，这正是多态社会意义危机取代生存危机成为主要矛盾的感知层标志。
+title_en: Technological Backgrounding (Chain F)
+summary_en: Once fusion, AI, and automation mature they cease to be perceived as breakthroughs and recede into the background — the center of social concern shifts to how to live.
+overview_en: |
+  Chain F describes a shift in perception, not in matter: technology moves from news to background, marking the completion of the fusion axis's L4 (energy abundance becomes backdrop) and the AI axis's Automation Saturation — new displacement stops being news and becomes the default condition of social operation. After backgrounding, social debate moves from what technology can do to how people live in a world whose material problems technology has solved — the perceptual marker of the Meaning Crisis replacing the survival crisis as the Polymorphic Society's main contradiction.
 ---
 **词典定义（v156 关键字词典，原文）**
 

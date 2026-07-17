@@ -12,6 +12,10 @@ related: bsc, gongying-piaoju, s4-2-1
 summary: 就业已大规模崩塌而制度保障尚未到位的窗口。
 overview: |
   裸露期是就业叙事的核心概念。它的存在不意味着社会变穷——AI替代就业的同时提升了生产率，整体财富在增长；但财富增长与制度能够调动的财富之间存在结构性的时序落差，这才是裸露期痛苦的真实来源。各路径裸露期长度差异极大：中国约3—5年（最短），美欧约2031—2040年为最脆弱窗口，D/E类国家的裸露期是结构性的，不随时间自动结束。
+title_en: Exposure Window
+summary_en: The window in which employment has already collapsed at scale while institutional protection is not yet in place.
+overview_en: |
+  The Exposure Window is the core concept of the employment narrative. Its existence does not mean society grows poorer — AI raises productivity as it displaces, and total wealth rises; but a structural time gap separates wealth growth from the wealth institutions can mobilize, and that gap is the real source of the window's pain. Lengths differ sharply: about 3–5 years in China (the shortest); roughly 2031–2040 as the most vulnerable window in the US and Europe; for D- and E-type countries the window is structural and does not close of its own accord.
 ---
 **定义（v149 4.2.1 首段，原文）**
 

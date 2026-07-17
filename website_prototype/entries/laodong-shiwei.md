@@ -12,6 +12,10 @@ related: s1-2-2, s1-4-1, v1
 summary: V1上升→标准化劳动价值下降→大量个体失去被需要的位置→意义危机扩散。
 overview: |
   链A是六条主因果链的起点：AI突破标准化认知能力这道“最后防线”，使历次技术革命“替代→升级→再就业”的循环失去运作条件——不是新岗位数量不足，而是其认知门槛已超过大多数被替代者的可及范围。劳动收入占GDP比重系统性下降而资本收入高度集中，两个趋势叠加使以劳动贡献为依据的分配逻辑在物质层面失去基础，分配问题从政治争议变成结构现实。
+title_en: Labor Displacement (Chain A)
+summary_en: V1 rises → the value of standardized labor falls → large numbers lose their needed positions → the Meaning Crisis spreads.
+overview_en: |
+  Chain A is where the six causal chains begin: AI breaks through standardized cognition — the last line of defense — and the cycle of displacement, upskilling, and re-employment that carried every previous technological revolution loses its operating condition: not too few new jobs, but cognitive entry bars beyond most of the displaced. Labor's share of GDP falls systematically while capital income concentrates; together the two trends strip the material basis from distribution keyed to labor contribution, turning the distribution question from political controversy into structural fact.
 ---
 **词典定义（v156 关键字词典，原文）**
 

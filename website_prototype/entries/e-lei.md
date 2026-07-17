@@ -11,6 +11,10 @@ related: s1-2-4, shihuo-shequ
 summary: 综合实力极低，两大体系均无主动整合动力，实质脱嵌于全球体系，内部区分结构性脱嵌与冲突性脱嵌两种形态。
 overview: |
   对应旧版I类（边缘经济体）。E类是七类分类中综合实力最低、两大体系整合动力最弱的一端，与C/D类不同之处在于其脱嵌是结构性的，不因资源禀赋或议价能力而改变——这一路径下的社区形态多表现为退出社区、失活社区等本地化生存单元。
+title_en: E: Marginal Economies (Forgotten Zones)
+summary_en: Economies of very low comprehensive strength that neither major system has any active incentive to integrate; effectively detached from the global system, divided internally into structural and conflict-driven detachment.
+overview_en: |
+  Corresponds to the old I type (marginal economies). E is the end of the seven-type classification with the lowest strength and the weakest integration pull from either system. What distinguishes it from C and D is that its detachment is structural, unchanged by resource endowment or bargaining power — community forms on this path run to Post-Employment Communities, Dormant Communities, and other localized survival units.
 ---
 **词典定义（v156 关键字词典，原文）**
 

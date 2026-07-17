@@ -12,6 +12,10 @@ related: s1-7-3
 summary: 痛苦仍然真实存在，但由于缺少集体行动目标与组织条件，更多以内化、沉默、抑郁和个体化方式被承受。
 overview: |
   个体心理挑战因高度私人化而难以政治组织化——“我感到空虚”不能被转化为政治纲领，“我的生活没有意义”不能被转化为集体要求。这使心理层面的适应过程主要在个体和社区层面进行而非通过制度性渠道，是多态稳定的内在机制之一：精神健康挑战是背景变量而非威胁，整体社会痛苦指数随BSC覆盖和社区稳态形成而趋于收敛。
+title_en: Privatization of Suffering
+summary_en: Pain remains real, but for lack of collective targets and organizing conditions it is borne increasingly through internalization, silence, depression, and individualized coping.
+overview_en: |
+  Individual psychological struggle resists political organization because it is radically private — I feel empty cannot become a political program, and my life lacks meaning cannot become a collective demand. Psychological adjustment therefore proceeds mainly at the individual and community levels rather than through institutional channels — one of Polymorphic Stability's internal mechanisms: mental-health strain is a background variable, not a threat, and aggregate social pain converges as BSC coverage and community steady states form.
 ---
 **词典定义（v156 关键字词典，原文）**
 

@@ -12,6 +12,10 @@ related: s1-4-5, shihuo-shequ
 summary: 工时下降并不自动带来幸福：对有内在结构的人，闲暇转化为创造；对缺乏结构的人，闲暇可能转化为空虚、成瘾与失重。
 overview: |
   时间分配的分化沿意义框架有无切割，不沿阶级线。社区是意义框架最可靠的来源之一：内聚力越强，闲暇转化为创造而非虚无的概率越高——同样的24小时，在活跃社区与失活社区是根本不同的两种存在状态。24小时标准工时2058—2065年间陆续确立后，这一分化成为多态社会内部差异的核心维度之一。
+title_en: Leisure Divergence
+summary_en: Falling working hours do not automatically bring happiness: for those with inner structure, leisure converts into creation; for those without, into emptiness, addiction, and weightlessness.
+overview_en: |
+  The divergence in time use cuts along the presence or absence of meaning frameworks, not along class lines. Community is among the most reliable sources of such frameworks: the stronger the cohesion, the likelier leisure becomes creation rather than void — the same 24 hours are two different modes of existence in active and dormant communities. Once the 24-hour standard workweek settles in across 2058–2065, this divergence becomes one of the core dimensions of internal difference in the Polymorphic Society.
 ---
 **词典定义（v156 关键字词典，原文）**
 

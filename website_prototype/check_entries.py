@@ -13,6 +13,8 @@
   [C] 切分进度对账（按分派清单统计已切分/待切分）
   [J] 概念术语"见于"表重生成（登记项12：替代词典过时的"见于"列）→ site/jianyu.json
   [V] source 字段可验证性格式校验（D-051③：须含"§节号 第N段"或"词典"等可定位锚点，否则告警）
+  [E] 英文层校验（D-070：title_en/summary_en/overview_en 三字段全有或全无；术语表禁用变体 lint；
+      双语漂移——中文 summary/overview 改动而英文未同轮更新时告警；进度统计）
 退出码: 有 ERROR 为 1，否则 0。
 """
 import os, re, sys, json, glob, hashlib
@@ -149,26 +151,35 @@ def main():
         elif assigned != e['layer']:
             errors.append(f'[L] {e["id"]}: layer="{e["layer"]}" 与分派清单 "{assigned}"（节{sec}）不符')
 
-    # [D] 原文漂移
+    # [D] 原文漂移 + 双语基线（D-067/D-070：lock 扩双语——每词条记 zh 哈希（summary+overview），
+    # 已翻译词条另记 en 哈希（title_en+summary_en+overview_en）；中文改动而英文未同轮更新时告警）
     lock = json.load(open(LOCK, encoding='utf-8')) if os.path.exists(LOCK) else {}
     new_lock = {}
     for e in entries:
-        if not e.get('extract'):
-            continue
-        text = extract_section(lines, e['extract'])
-        if text is None:
-            errors.append(f'[D] {e["id"]}: v149 中找不到节 {e["extract"]}')
-            continue
-        h = hashlib.sha256(text.encode('utf-8')).hexdigest()[:16]
-        new_lock[e['id']] = {'section': e['extract'], 'hash': h}
+        rec = {}
+        if e.get('extract'):
+            text = extract_section(lines, e['extract'])
+            if text is None:
+                errors.append(f'[D] {e["id"]}: v149 中找不到节 {e["extract"]}')
+            else:
+                h = hashlib.sha256(text.encode('utf-8')).hexdigest()[:16]
+                rec['section'], rec['hash'] = e['extract'], h
+                old = lock.get(e['id'])
+                if old and old.get('hash') and old['hash'] != h:
+                    warns.append(f'[D] {e["id"]}: 节 {e["extract"]} 原文已变动——summary/overview 需人工复核后 --update-lock')
+                elif not old and not update_lock:
+                    infos.append(f'[D] {e["id"]}: 无哈希基线（首次运行请 --update-lock 建立）')
+        rec['zh'] = hashlib.sha256((e.get('summary', '') + '\n' + e.get('overview', '')).encode('utf-8')).hexdigest()[:16]
+        if any(e.get(k) for k in ('title_en', 'summary_en', 'overview_en')):
+            rec['en'] = hashlib.sha256(('\n'.join(e.get(k, '') for k in ('title_en', 'summary_en', 'overview_en'))).encode('utf-8')).hexdigest()[:16]
+        new_lock[e['id']] = rec
         old = lock.get(e['id'])
-        if old and old['hash'] != h:
-            warns.append(f'[D] {e["id"]}: 节 {e["extract"]} 原文已变动——summary/overview 需人工复核后 --update-lock')
-        elif not old and not update_lock:
-            infos.append(f'[D] {e["id"]}: 无哈希基线（首次运行请 --update-lock 建立）')
+        if old and old.get('zh') and old.get('en'):
+            if old['zh'] != rec['zh'] and old['en'] == rec.get('en'):
+                warns.append(f'[E] {e["id"]}: 中文 summary/overview 已改而英文未同轮更新（D-067 双语同推）——复核英文后 --update-lock')
     if update_lock:
         json.dump(new_lock, open(LOCK, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-        infos.append(f'[D] 哈希基线已更新：{len(new_lock)} 条 → entries.lock.json')
+        infos.append(f'[D] 哈希基线已更新：{len(new_lock)} 条（extract {sum(1 for v in new_lock.values() if "hash" in v)} / en {sum(1 for v in new_lock.values() if "en" in v)}）→ entries.lock.json')
 
     # [R] 引用分级（事件层扩展：接口声明四字段中的source_text prose也纳入扫描——事件层方法文档v1第2节登记的已知缺口，本轮随事件层批量顺手核销）
     entried_secs = {e['extract'].replace('-intro', '').replace('-full', '') for e in entries if e.get('extract')}
@@ -197,6 +208,40 @@ def main():
             continue  # 缺失已由 [S] 报错
         if not re.search(r'§|词典|第[一二三四五六七八九十\d]+段', src):
             warns.append(f'[V] {eid}: source "{src}" 未见"§节号/第N段/词典"等可定位锚点，不满足D-051③可验证性要求')
+
+    # [E] 英文层校验（D-070：字段完整性全有或全无 + 术语表禁用变体 lint + 进度统计）
+    EN_FIELDS = ('title_en', 'summary_en', 'overview_en')
+    BANNED_EN = {  # 术语表 v4 已裁定弃用的变体（含点评轮不采纳项），命中即错误
+        'commercial deployment': '聚变商业化固定 Commercialization of Fusion（术语表v4七、文风规范§6-4）',
+        'technology diffusion': '用 technological diffusion（文风规范§6-6）',
+        'Mutual Neglect': '相互忽视均衡首选 Mutual Disregard Equilibrium',
+        'Plural Society': '多态社会=Polymorphic Society（避免社会学他义）',
+        'Semi-Integration': '半接入=Semi-Connected State（术语表v2改译）',
+        'Immersion Pod': '仿真舱=Simulation Pod（Sean 裁定）',
+        'Exit Communit': '退出社区=Post-Employment Communities（术语表v2改译）',
+        'Lapsed Communit': '失活社区=Dormant Communities（Sean 裁定）',
+        'Hedging Autonom': 'C类=Hedging States（术语表v2改译）',
+        'Employment-Exited': '退出就业人口=Population Exiting Employment（术语表v2改译）',
+        'Baseline-Coverage Population': '=Baseline-Covered Population（术语表v2改译）',
+        'Well-Being': '功能性幸福=Functional Wellbeing（去连字符）',
+        'institutional conversion': '制度转化=institutional transformation（文风规范§6-6）',
+        'driving force': '用 underlying driver（文风规范§6-6）',
+    }
+    en_done = 0
+    for e in entries:
+        eid = e.get('id', '?')
+        present = [k for k in EN_FIELDS if e.get(k)]
+        if not present:
+            continue
+        if len(present) < len(EN_FIELDS):
+            errors.append(f'[E] {eid}: 英文字段不完整（有 {",".join(present)}，缺 {",".join(k for k in EN_FIELDS if not e.get(k))}）——三字段全有或全无')
+            continue
+        en_done += 1
+        en_text = '\n'.join(e[k] for k in EN_FIELDS)
+        for bad, why in BANNED_EN.items():
+            if bad.lower() in en_text.lower():
+                errors.append(f'[E] {eid}: 命中禁用变体 "{bad}"——{why}')
+    infos.append(f'[E] 英文层进度：{en_done}/{len(entries)} 词条已双语')
 
     # [C] 切分进度（仅统计三级节可切分单元；索引词条按二级节计）
     lvl2 = [s for s in amap if re.match(r'^\d+\.\d+$', s)]

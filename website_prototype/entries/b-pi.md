@@ -11,6 +11,10 @@ related: s4-11-7, u-cpi, bsc-yuliang-lv
 summary: 锁定配给篮子的价格指标，反映基本生存包的价格变动，是财政部积分发放量调整的操作依据，不是联储的直接政策目标。
 overview: |
   B-PI追踪配给覆盖商品的实际生产成本变动：合成食品原料价格、住房建设成本、基础医疗服务的供给侧投入。B-PI与U-CPI通过双锚协议每季度同步——两者的分离本身就是协议的操作指标基础，也是A1体系传统单锁通胀框架失灵后的制度性修补。
+title_en: B-PI (Provisioning-Basket Price Index)
+summary_en: The price indicator locked to the provisioning basket: it tracks price movement in the basic-subsistence package and is the Treasury's operational basis for adjusting credit issuance, not a direct Federal Reserve policy target.
+overview_en: |
+  B-PI tracks actual production-cost movement in the goods covered by provisioning: synthetic-food inputs, housing construction costs, and supply-side inputs to basic medical services. B-PI and U-CPI are synchronized quarterly under the Dual-Anchor Accord — their separation is itself the accord's operational-indicator basis, an institutional patch after the A1 system's traditional single-anchor inflation framework failed.
 ---
 **词典定义（v156 关键字词典，原文）**
 

@@ -12,6 +12,10 @@ related: s1-6, dongdangqi, luoluqi
 summary: AI冲击先到而聚变红利未落地、制度响应滞后的高不确定阶段——身份真空与政治极化最容易在此爆发。
 overview: |
   “前聚变动荡期”这一标注本身容易造成误导——聚变电网2044年上线，但经济渗透到2049—2053年才在核心区完成，制度响应在不同路径延迟到2052—2059年甚至更晚。发达路径的核心动荡集中在2027—2044年，全球南方的动荡延续到2050年代，被遗忘地带的生存压力2072年仍未解除。不存在单一的动荡期，只存在各路径各自经历的、进度不一的压力积累与消化过程，具体来源见“动荡期”词条。
+title_en: Pre-Fusion Turbulent Period
+summary_en: The high-uncertainty stage when the AI shock has arrived, the fusion dividend has not landed, and institutional response lags — Identity Vacuum and political polarization erupt most easily here.
+overview_en: |
+  The label itself can mislead — the fusion grid connects in 2044, but economic penetration completes in core regions only in 2049–2053, and institutional response stretches to 2052–2059 or later on different paths. Core turbulence on developed paths concentrates in 2027–2044; Global South turbulence runs into the 2050s; survival pressure in the Forgotten Zones remains unrelieved in 2072. There is no single Turbulent Period — only path-specific processes of pressure accumulation and digestion at different stages; for the sources see the Turbulent Period entry.
 ---
 **词典定义（v156 关键字词典，原文）**
 

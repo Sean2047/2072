@@ -12,6 +12,10 @@ related: s4-8-7
 summary: 既未主动寻找工作、也未进入退休制度的成年人口——AI深化替代后实质性脱离劳动市场的群体，不是统计意义上的失业者。
 overview: |
   本文件以此中性术语替代带有工业时代价值判断的“功能性闲置”表述。两套体系均存在但可见性相反：A1中退出就业者获BSC与自由支配时间，意义危机可见且被公开讨论；A2中依赖供应票据体系的庞大退出人口鲜少出现在官方叙事中——这是两套体系镜像不对称处理的核心表现。
+title_en: Population Exiting Employment
+summary_en: Adults neither actively seeking work nor entering retirement systems — the group that has substantively left the labor market after deep AI displacement, distinct from the statistically unemployed.
+overview_en: |
+  The document uses this neutral term in place of functional idleness, a phrase loaded with industrial-era judgment. Both systems have the group, with opposite visibility: in A1, exiters receive BSC and free time, and the Meaning Crisis is visible and publicly debated; in A2, the large exited population dependent on supply vouchers rarely appears in official narrative — the core case of the two systems' mirrored asymmetry.
 ---
 **词典定义（v156 关键字词典，原文）**
 

@@ -11,6 +11,10 @@ related: s4-11-1, shuangmao-xieyi, b-pi
 summary: 锁定通用美元经济圈的价格指标，成分以资本品、高端服务、金融资产收益率、科技消费品为主，是联储利率决策的主要参考锚。
 overview: |
   U-CPI排除能源（已归零）和合成食品（工业定价）的直接权重，专门追踪第一层通用美元经济圈的价格水平。当U-CPI显示资本品价格上涨或资产价格泡沫迹象，联储升息；显示信贷萎缩或资产价格下行，联储降息——传统货币政策工具在这个篮子里的传导机制基本保留。U-CPI与B-PI的分层设计是双锚协议的操作指标基础。
+title_en: U-CPI (Universal Consumer Price Index)
+summary_en: The price indicator locked to the universal-dollar economy, weighted toward capital goods, high-end services, financial-asset yields, and technology consumer goods — the Fed's main reference anchor for rate decisions.
+overview_en: |
+  U-CPI excludes direct weights for energy (already near zero) and synthetic food (industrially priced), tracking the price level of the first-layer universal-dollar economy. When it shows capital-goods inflation or asset-bubble signs the Fed tightens; when it shows credit contraction or falling asset prices the Fed eases — conventional monetary transmission survives largely intact inside this basket. The layered U-CPI/B-PI design is the operational-indicator basis of the Dual-Anchor Accord.
 ---
 **词典定义（v156 关键字词典，原文）**
 

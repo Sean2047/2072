@@ -10,6 +10,10 @@ related: s1-1, geti-buquedingxing, s5-8-2
 summary: 世界观负责定义结构性边界与成本结构，故事负责展示人物如何在这些边界内选择。
 overview: |
   这是宏观世界观文件与中观叙事文本分工的核心命题：结构（技术冲击、制度响应、成本结构）决定一个角色能做出的选择集合，但不决定其在集合内具体选择哪一项。世界观的任务止于划定可能性空间的边界，个体在空间内的具体选择留给故事人物承载——这条命题同时是1.1节方法论分工的浓缩表述，也在5.8.2节被再次援引。
+title_en: Structure Determines the Space of Possibilities
+summary_en: The worldview defines structural boundaries and cost structures; stories show how characters choose within them.
+overview_en: |
+  This is the core proposition of the division of labor between the macro worldview document and meso narrative texts: structure (technological shock, institutional response, cost structures) determines the set of choices available to a character, but not which member of the set the character picks. The worldview's task ends at drawing the boundary of the possibility space; concrete choices within it are carried by the story's characters. The proposition compresses the methodology of section 1.1 and is invoked again in 5.8.2.
 ---
 **词典定义（v156 关键字词典，原文）**
 

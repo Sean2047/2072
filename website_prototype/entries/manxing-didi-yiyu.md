@@ -12,6 +12,10 @@ related: s1-7-1
 summary: 比急性崩溃更常见的普遍情绪底色：没有明显灾难，却长期感到乏力、低兴奋与无方向。
 overview: |
   慢性低度抑郁（Dysthymia）是多态社会最常见的临床呈现，远比急性抑郁症或躁郁症更普遍，不影响基本功能、不达临床干预门槛，但持续降低生活质量——“没有什么特别不好，但也没有什么特别好”。这种状态在工业时代被工作和生存压力掩盖，在多态社会中因缺少覆盖物而充分浮现，也引发了关于意义感缺失是疾病还是人类状况一部分的深层争议。
+title_en: Chronic Low-Grade Depression
+summary_en: The prevailing emotional baseline, more common than acute collapse: no visible disaster, yet long-running fatigue, low arousal, and directionlessness.
+overview_en: |
+  Chronic Low-Grade Depression (dysthymia) is the Polymorphic Society's most common clinical presentation, far more widespread than acute depression or bipolar disorder; it does not impair basic functioning or reach clinical thresholds, but steadily lowers quality of life — nothing especially wrong, nothing especially good. Industrial-era work and survival pressure masked the state; in the Polymorphic Society it surfaces fully for lack of cover, feeding the deeper dispute over whether absent meaning is an illness or part of the human condition.
 ---
 **词典定义（v156 关键字词典，原文）**
 
