@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import { fulldoc, entries, BASE_DOC, url, rewriteLinks } from '../../lib/data.mjs';
+
+const flat = [];
+for (const ch of fulldoc.chapters) {
+  flat.push({ kind: 'chapter', slug: ch.slug, ch });
+  for (const s of ch.sections) flat.push({ kind: 'section', slug: s.slug, ch, s });
+}
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const ch of fulldoc.chapters) {
+    paths.push({ params: { slug: ch.slug } });
+    for (const s of ch.sections) paths.push({ params: { slug: s.slug } });
+  }
+  return paths;
+}
+
+const { slug } = Astro.params;
+const i = flat.findIndex((p) => p.slug === slug);
+const page = flat[i];
+const prev = i > 0 ? flat[i - 1] : null;
+const next = i < flat.length - 1 ? flat[i + 1] : null;
+
+const titleOf = (p) =>
+  p.kind === 'chapter' ? p.ch.title : (p.s.sec_no ? `${p.s.sec_no}　${p.s.title}` : p.s.title);
+
+const pageTitle = titleOf(page);
+const html = rewriteLinks(page.kind === 'chapter' ? page.ch.intro_html : page.s.html);
+
+// 本节词条：extract 落在本节号下的章节/索引词条
+let secEntries = [];
+if (page.kind === 'section' && page.s.sec_no && /^[0-9A]/.test(page.s.sec_no)) {
+  const no = page.s.sec_no;
+  secEntries = entries.filter((e) => {
+    if (!e.extract) return false;
+    const base = e.extract.replace(/-(intro|full)$/, '');
+    return base === no || base.startsWith(no + '.');
+  });
+}
+---
+<Base title={pageTitle} active="read">
+  <nav class="read-crumb">
+    <a class="entry-link" href={url('/read/')}>目录</a>
+    {page.kind === 'section' && (
+      <>
+        <span class="crumb-sep">/</span>
+        <a class="entry-link" href={url(`/read/${page.ch.slug}/`)}>{page.ch.title}</a>
+      </>
+    )}
+  </nav>
+
+  <h1 class="read-title">{pageTitle}</h1>
+
+  {html && <div class="prose read-prose"><Fragment set:html={html} /></div>}
+
+  {page.kind === 'chapter' && page.ch.sections.length > 0 && (
+    <section class="children">
+      <h2>本章各节</h2>
+      <ul>
+        {page.ch.sections.map((s) => (
+          <li>
+            <a class="entry-link" href={url(`/read/${s.slug}/`)}>
+              {s.sec_no && `${s.sec_no}　`}{s.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {secEntries.length > 0 && (
+    <section class="related">
+      <h2>本节词条</h2>
+      <div class="chips">
+        {secEntries.map((e) => (
+          <a class="entry-link chip" href={url(`/entries/${e.id}/`)} data-id={e.id}>{e.title}</a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <nav class="read-nav">
+    {prev ? <a class="entry-link" href={url(`/read/${prev.slug}/`)}>← {titleOf(prev)}</a> : <span />}
+    {next ? <a class="entry-link" href={url(`/read/${next.slug}/`)}>{titleOf(next)} →</a> : <span />}
+  </nav>
+</Base>

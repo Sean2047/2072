@@ -130,6 +130,14 @@ def md_to_html(md):
             out.append(f'<blockquote><p>{inline_md(inner)}</p></blockquote>')
         elif all(l.lstrip().startswith('- ') for l in lines):
             out.append('<ul>' + ''.join(f'<li>{inline_md(l.lstrip()[2:])}</li>' for l in lines) + '</ul>')
+        elif re.match(r'^#{3,6}\s', lines[0]):
+            # 三级及以下标题（-full 整节词条与全文阅读视图会包含 ###/#### 行）
+            hm = re.match(r'^(#{3,6})\s+(.*)$', lines[0])
+            lvl = min(len(hm.group(1)) - 1, 6)  # ###→h2 ####→h3（页面h1留给节标题）
+            out.append(f'<h{lvl}>{inline_md(hm.group(2))}</h{lvl}>')
+            rest = '\n'.join(lines[1:]).strip()
+            if rest:
+                out.append(f'<p>{inline_md(rest)}</p>')
         elif b.startswith('*') and b.endswith('*') and not b.startswith('**'):
             out.append(f'<p class="coda">{inline_md(b[1:-1])}</p>')
         else:
@@ -377,6 +385,83 @@ def main():
     }
     with open(os.path.join(OUT, 'entries.json'), 'w', encoding='utf-8') as f:
         json.dump(entries_json, f, ensure_ascii=False, indent=1)
+
+    # ---------- fulldoc.json：全文阅读视图数据出口（2026-07-17，门户重构） ----------
+    # 按一级章→二级节切分基准文档全文，正文过同一套 md_to_html + 节号链接 + 术语链接管线。
+    # 独立 stats（fd_stats），不污染词条图谱；"目录"章跳过（导航由站点自动生成）。
+    CH_NUM = {'一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7}
+    def _chapter_slug(title):
+        if title.startswith('前言'):
+            return 'preface'
+        if title.startswith('目录'):
+            return None
+        if title.startswith('速览页'):
+            return 'overview'
+        m = re.match(r'^第([一二三四五六七])部分', title)
+        if m:
+            return f'part{CH_NUM[m.group(1)]}'
+        if title.startswith('附录A'):
+            return 'appendix-a'
+        if title.startswith('结语'):
+            return 'epilogue'
+        if title.startswith('关键字词典'):
+            return 'dictionary'
+        return None
+    chapters, cur, cursec = [], None, None
+    for l in lines:
+        m1 = re.match(r'^#\s+(.*)$', l)
+        m2 = re.match(r'^##\s+(.*)$', l) if not m1 else None
+        if m1:
+            cur = {'title': m1.group(1).strip(), 'intro': [], 'sections': []}
+            chapters.append(cur)
+            cursec = None
+            continue
+        if m2 and cur is not None:
+            cursec = {'title': m2.group(1).strip(), 'lines': []}
+            cur['sections'].append(cursec)
+            continue
+        (cursec['lines'] if cursec is not None else cur['intro'] if cur is not None else []).append(l)
+    fd_stats = {'resolved': [], 'unresolved': [], 'term_links': 0, 'term_edges': []}
+    def _render_doc(md_text, self_id):
+        h = md_to_html(md_text)
+        h = link_refs(h, sec_map, fd_stats, self_id)
+        h = link_terms(h, alias_map, self_id, fd_stats)
+        return h
+    fd_chapters = []
+    for ch in chapters:
+        cslug = _chapter_slug(ch['title'])
+        if cslug is None:
+            continue
+        fc = {'slug': cslug, 'title': ch['title'],
+              'intro_html': _render_doc('\n'.join(ch['intro']).strip(), f'doc-{cslug}'),
+              'sections': []}
+        ov_count = 0
+        for s in ch['sections']:
+            mm = re.match(r'^([0-9A]+\.\d+)[　\s]+(.*)$', s['title'])
+            mo = re.match(r'^速览([一二三四])[　\s]+(.*)$', s['title'])
+            if mm:
+                sec_no, stitle = mm.group(1), mm.group(2)
+                sslug = sec_no.lower().replace('.', '-')
+            elif mo:
+                ov_count += 1
+                sec_no, stitle = s['title'].split('　')[0] if '　' in s['title'] else f'速览{mo.group(1)}', mo.group(2)
+                sslug = f'overview-{CH_NUM[mo.group(1)]}'
+            else:
+                sec_no, stitle = '', s['title']
+                sslug = f'{cslug}-s{len(fc["sections"])+1}'
+            fc['sections'].append({'slug': sslug, 'sec_no': sec_no, 'title': stitle,
+                                    'html': _render_doc('\n'.join(s['lines']).strip(), f'doc-{sslug}')})
+        fd_chapters.append(fc)
+    fulldoc = {
+        'built_from': f'{os.path.basename(V149)}（构建产物，勿手工编辑；全文阅读视图，内容零改写）',
+        'base_doc': os.path.basename(V149),
+        'chapters': fd_chapters,
+    }
+    with open(os.path.join(OUT, 'fulldoc.json'), 'w', encoding='utf-8') as f:
+        json.dump(fulldoc, f, ensure_ascii=False, indent=1)
+    n_secs = sum(len(c['sections']) for c in fd_chapters)
+    print(f'全文阅读视图：{len(fd_chapters)} 章 / {n_secs} 节 → site/fulldoc.json'
+          f'（节号链接解析 {len(fd_stats["resolved"])}，未收录 {len(set(s for _, s in fd_stats["unresolved"]))} 个节号，术语链接 {fd_stats["term_links"]} 处）')
 
     import sqlite3, tempfile, shutil
     dbp = os.path.join(OUT, 'entries.db')

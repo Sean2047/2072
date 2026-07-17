@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { fulldoc, BASE_DOC, url } from '../../lib/data.mjs';
+const chapters = fulldoc.chapters;
+---
+<Base title="全文阅读" active="read">
+  <header class="hero">
+    <h1>全文阅读</h1>
+    <p class="sub">
+      世界观文档（{BASE_DOC.replace('.md', '')}）按章节切分的线性阅读视图，内容零改写；
+      文中节号引用与术语自动链接到对应词条。
+    </p>
+  </header>
+
+  <div class="toc">
+    {chapters.map((ch) => (
+      <section class="toc-chapter">
+        <h2><a class="entry-link" href={url(`/read/${ch.slug}/`)}>{ch.title}</a></h2>
+        {ch.sections.length > 0 && (
+          <ul>
+            {ch.sections.map((s) => (
+              <li>
+                <a class="entry-link" href={url(`/read/${s.slug}/`)}>
+                  {s.sec_no && <span class="toc-no">{s.sec_no}</span>}{s.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))}
+  </div>
+</Base>

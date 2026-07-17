@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/data.mjs';
+
+// 场景正文暂不公开（作者裁定：先占位），此处仅列篇目预告
+const scenes = [
+  { title: '海底设备巡检', hint: '深海采矿城镇 · 一次例行作业' },
+  { title: '训练舱 · 月球基地', hint: '仿真舱与前进基地之间' },
+  { title: '地面交通管理中心', hint: '交通控制系统的一个班次' },
+  { title: '六秒', hint: '动荡期的一个瞬间' },
+];
+---
+<Base title="故事" active="stories">
+  <header class="hero">
+    <h1>故事</h1>
+    <p class="sub">筹备中 · 基于 2072 世界观的小说与场景创作</p>
+  </header>
+
+  <div class="plan-body">
+    <p>
+      世界观文档负责机制与推演，故事负责把人放进去。
+      小说方向聚焦动荡期的微观经验：宏大机制如何落在具体的人身上。
+      以下场景片段已完成初稿，整理后将陆续发布。
+    </p>
+
+    <div class="scene-list">
+      {scenes.map((s) => (
+        <div class="scene-card">
+          <h3>{s.title}</h3>
+          <p>{s.hint}</p>
+          <span class="fstatus off">整理中</span>
+        </div>
+      ))}
+    </div>
+
+    <p>
+      在此之前，欢迎先阅读<a class="entry-link" href={url('/read/')}>世界观全文</a>，
+      或从<a class="entry-link" href={url('/entries/')}>词条库</a>的事件层词条进入具体历史推演。
+    </p>
+  </div>
+</Base>

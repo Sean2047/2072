@@ -19,6 +19,7 @@ function loadJSON(name) {
 export const data = loadJSON('entries.json');
 export const graph = loadJSON('graph.json');
 export const jianyu = loadJSON('jianyu.json');
+export const fulldoc = loadJSON('fulldoc.json');
 
 export const entries = data.entries;
 export const VARS = data.vars;

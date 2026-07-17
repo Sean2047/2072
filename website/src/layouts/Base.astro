@@ -4,9 +4,13 @@ import '../styles/global.css';
 const { title, active = '' } = Astro.props;
 const dataUrl = url('/data.json');
 const nav = [
-  { href: url('/'), key: 'index', label: '词条总览' },
-  { href: url('/graph/'), key: 'graph', label: '知识图谱' },
-  { href: url('/dict/'), key: 'dict', label: '关键字词典' },
+  { href: url('/'), key: 'home', label: '首页' },
+  { href: url('/read/'), key: 'read', label: '全文阅读' },
+  { href: url('/entries/'), key: 'entries', label: '词条库' },
+  { href: url('/slice/'), key: 'slice', label: '时空断面' },
+  { href: url('/stories/'), key: 'stories', label: '故事' },
+  { href: url('/games/'), key: 'games', label: '游戏' },
+  { href: url('/discuss/'), key: 'discuss', label: '讨论' },
 ];
 ---
 <!DOCTYPE html>

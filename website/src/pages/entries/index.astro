@@ -1,0 +1,329 @@
+---
+import Base from '../../layouts/Base.astro';
+import { entries, graph, byId, url } from '../../lib/data.mjs';
+import { tours } from '../../lib/tours.mjs';
+
+// 图谱数据：骨架层（概念+索引）默认可见，其余点击邻域展开
+const nodes = entries.map((e) => ({
+  id: e.id,
+  title: e.title,
+  type: e.type,
+  layer: e.layer,
+  summary: e.summary,
+  aliases: e.aliases || [],
+  skeleton: e.type === '概念' || e.type === '索引',
+}));
+const edges = graph.edges;
+const entryPrefix = url('/entries/');
+
+const tourData = tours.map((t) => ({
+  ...t,
+  steps: t.steps.filter((s) => byId.has(s)).map((s) => ({ id: s, title: byId.get(s).title })),
+}));
+const nSkeleton = nodes.filter((n) => n.skeleton).length;
+---
+<Base title="词条库" active="entries">
+  <header class="hero">
+    <h1>词条库</h1>
+    <p class="sub">
+      {entries.length} 个词条。图谱默认只显示骨架层（{nSkeleton} 个概念与索引词条），点击节点展开邻域、进入词条；
+      或走下方导览路径。需要精确筛选时用
+      <a class="entry-link" href={url('/entries/list/')}>词条检索</a>，术语速查见
+      <a class="entry-link" href={url('/dict/')}>关键字词典</a>。
+    </p>
+  </header>
+
+  <section class="tours">
+    <h2>导览路径</h2>
+    <div class="tour-list">
+      {tourData.map((t) => (
+        <div class="tour">
+          <div class="tour-head"><strong>{t.title}</strong><span class="tour-desc">{t.desc}</span></div>
+          <div class="tour-steps">
+            {t.steps.map((s, i) => (
+              <>
+                {i > 0 && <span class="tour-arrow">→</span>}
+                <a class="entry-link chip" href={url(`/entries/${s.id}/`)} data-id={s.id}>{s.title}</a>
+              </>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <div class="graph-controls">
+    <input id="gq" class="fsel gsearch" type="search" placeholder="图内搜索词条…" autocomplete="off" />
+    <label><input type="checkbox" data-kind="ref" checked /> 节号引用</label>
+    <label><input type="checkbox" data-kind="related" checked /> 显式相关</label>
+    <label><input type="checkbox" data-kind="child" checked /> 索引子项</label>
+    <label><input type="checkbox" data-kind="term" /> 术语链接</label>
+    <button class="fchip" id="g-reset">重置骨架</button>
+    <button class="fchip" id="g-all">显示全部</button>
+  </div>
+
+  <div id="graph-wrap">
+    <canvas id="graph-canvas"></canvas>
+    <div id="graph-tip" hidden></div>
+    <div id="graph-results" hidden></div>
+    <div id="graph-panel" hidden></div>
+  </div>
+  <div class="graph-legend">
+    颜色<span class="dot" style="background:#1a5fb4"></span>理论层
+    <span class="dot" style="background:#217a3c"></span>技术层
+    <span class="dot" style="background:#b4541a"></span>事件层
+    <span class="dot" style="background:#6d28d9"></span>概念词条 · 大小=入边数 · 拖拽平移 / 滚轮缩放 / 点击选中
+  </div>
+
+  <script define:vars={{ nodes, edges, entryPrefix }}>
+    (function () {
+      const canvas = document.getElementById('graph-canvas');
+      const wrap = document.getElementById('graph-wrap');
+      const tip = document.getElementById('graph-tip');
+      const panel = document.getElementById('graph-panel');
+      const results = document.getElementById('graph-results');
+      const gq = document.getElementById('gq');
+      const ctx = canvas.getContext('2d');
+      const DPR = window.devicePixelRatio || 1;
+
+      const COLOR = { 理论: '#1a5fb4', 技术: '#217a3c', 事件: '#b4541a', 概念: '#6d28d9' };
+      const EDGE_COLOR = { ref: 'rgba(26,95,180,.28)', term: 'rgba(109,40,217,.10)', related: 'rgba(138,90,43,.4)', child: 'rgba(33,122,60,.28)' };
+
+      const idx = new Map();
+      nodes.forEach((n, i) => idx.set(n.id, i));
+      const deg = new Array(nodes.length).fill(0);
+      edges.forEach((e) => { const t = idx.get(e.to); if (t !== undefined) deg[t]++; });
+
+      // 邻接表（按边类型）
+      const adj = nodes.map(() => []);
+      edges.forEach((e) => {
+        const s = idx.get(e.from), t = idx.get(e.to);
+        if (s === undefined || t === undefined) return;
+        adj[s].push({ n: t, kind: e.kind });
+        adj[t].push({ n: s, kind: e.kind });
+      });
+
+      const N = nodes.length;
+      nodes.forEach((n, i) => {
+        const a = (i / N) * Math.PI * 2;
+        const r = 160 + (i % 7) * 55;
+        n.x = Math.cos(a) * r; n.y = Math.sin(a) * r;
+        n.vx = 0; n.vy = 0;
+        n.color = n.type === '概念' ? COLOR['概念'] : (COLOR[n.layer] || '#6b7280');
+        n.r = 3 + Math.min(9, Math.sqrt(deg[i]) * 1.4);
+      });
+
+      let kinds = new Set(['ref', 'related', 'child']);
+      const visible = new Set();
+      let selected = null;
+      function resetSkeleton() {
+        visible.clear();
+        nodes.forEach((n, i) => { if (n.skeleton) visible.add(i); });
+        select(null);
+        rebuild();
+      }
+      function showAll() {
+        nodes.forEach((_, i) => visible.add(i));
+        rebuild();
+      }
+
+      let activeEdges = [];
+      let alpha = 1;
+      function rebuild() {
+        activeEdges = edges
+          .map((e) => ({ s: idx.get(e.from), t: idx.get(e.to), kind: e.kind }))
+          .filter((e) => e.s !== undefined && e.t !== undefined && kinds.has(e.kind)
+            && visible.has(e.s) && visible.has(e.t));
+        alpha = Math.max(alpha, 0.35);
+      }
+
+      let scale = 0.8, ox = 0, oy = 0;
+      function resize() {
+        const w = wrap.clientWidth, h = canvas.clientHeight || w * 0.62;
+        canvas.width = w * DPR; canvas.height = h * DPR;
+        if (!ox) { ox = w / 2; oy = h / 2; }
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function tick() {
+        if (alpha > 0.005) {
+          const vis = [...visible];
+          for (let ii = 0; ii < vis.length; ii++) {
+            const a = nodes[vis[ii]];
+            for (let jj = ii + 1; jj < vis.length; jj++) {
+              const b = nodes[vis[jj]];
+              let dx = a.x - b.x, dy = a.y - b.y;
+              let d2 = dx * dx + dy * dy + 0.01;
+              if (d2 > 48000) continue;
+              const f = 420 / d2;
+              dx *= f; dy *= f;
+              a.vx += dx; a.vy += dy; b.vx -= dx; b.vy -= dy;
+            }
+          }
+          for (const e of activeEdges) {
+            const a = nodes[e.s], b = nodes[e.t];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const d = Math.sqrt(dx * dx + dy * dy) + 0.01;
+            const f = (d - 65) * 0.002;
+            a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f;
+          }
+          for (const i of visible) {
+            const n = nodes[i];
+            n.vx -= n.x * 0.0005; n.vy -= n.y * 0.0005;
+            n.x += n.vx * alpha * 6; n.y += n.vy * alpha * 6;
+            n.vx *= 0.5; n.vy *= 0.5;
+          }
+          alpha *= 0.986;
+        }
+        draw();
+        requestAnimationFrame(tick);
+      }
+
+      let hover = null;
+      function draw() {
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.translate(ox, oy);
+        ctx.scale(scale, scale);
+        for (const e of activeEdges) {
+          const a = nodes[e.s], b = nodes[e.t];
+          ctx.strokeStyle = EDGE_COLOR[e.kind];
+          ctx.lineWidth = 1 / scale;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+        for (const i of visible) {
+          const n = nodes[i];
+          ctx.fillStyle = n.color;
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+          if (n === hover || n === selected) {
+            ctx.strokeStyle = '#1f2328'; ctx.lineWidth = 2 / scale; ctx.stroke();
+          }
+        }
+        const showLabel = scale > 1.4;
+        ctx.fillStyle = '#1f2328';
+        ctx.font = `${11 / Math.max(scale, 1)}px "PingFang SC", sans-serif`;
+        for (const i of visible) {
+          const n = nodes[i];
+          if (showLabel || n === selected || n === hover || (n.skeleton && n.type === '概念' && scale > 0.9)) {
+            ctx.fillText(n.title, n.x + n.r + 2, n.y + 3);
+          }
+        }
+      }
+
+      function pick(mx, my) {
+        const x = (mx - ox) / scale, y = (my - oy) / scale;
+        let best = null, bd = 1e9;
+        for (const i of visible) {
+          const n = nodes[i];
+          const dx = n.x - x, dy = n.y - y, d = dx * dx + dy * dy;
+          if (d < (n.r + 5) * (n.r + 5) && d < bd) { best = n; bd = d; }
+        }
+        return best;
+      }
+
+      function neighborsOf(n) {
+        const i = idx.get(n.id);
+        return adj[i].filter((a) => kinds.has(a.kind)).map((a) => a.n);
+      }
+
+      function select(n) {
+        selected = n;
+        if (!n) { panel.hidden = true; return; }
+        const nb = neighborsOf(n);
+        const hidden = nb.filter((i) => !visible.has(i)).length;
+        panel.innerHTML =
+          '<div class="p-title">' + n.title + '</div>' +
+          '<div class="p-meta">' + n.type + '词条 · ' + n.layer + '层</div>' +
+          '<div class="p-sum">' + n.summary + '</div>' +
+          '<div class="p-actions">' +
+          '<a class="fchip" href="' + entryPrefix + n.id + '/">打开词条</a>' +
+          (hidden ? '<button class="fchip" id="p-expand">展开邻域 +' + hidden + '</button>' : '') +
+          '<button class="fchip" id="p-close">关闭</button></div>';
+        panel.hidden = false;
+        const ex = document.getElementById('p-expand');
+        if (ex) ex.addEventListener('click', () => { nb.forEach((i) => visible.add(i)); rebuild(); select(n); });
+        document.getElementById('p-close').addEventListener('click', () => select(null));
+      }
+
+      function centerOn(n) {
+        const w = canvas.width / DPR, h = canvas.height / DPR;
+        ox = w / 2 - n.x * scale; oy = h / 2 - n.y * scale;
+      }
+
+      // 图内搜索
+      gq.addEventListener('input', () => {
+        const t = gq.value.trim().toLowerCase();
+        if (!t) { results.hidden = true; return; }
+        const hits = nodes.filter((n) =>
+          n.title.toLowerCase().includes(t) || n.aliases.some((a) => a.toLowerCase().includes(t))
+        ).slice(0, 12);
+        results.innerHTML = hits.length
+          ? hits.map((n) => '<div class="g-hit" data-id="' + n.id + '">' + n.title +
+              '<span class="g-hit-meta">' + n.type + '</span></div>').join('')
+          : '<div class="g-hit none">无匹配</div>';
+        results.hidden = false;
+        results.querySelectorAll('.g-hit[data-id]').forEach((el) => {
+          el.addEventListener('click', () => {
+            const n = nodes[idx.get(el.dataset.id)];
+            visible.add(idx.get(n.id));
+            rebuild(); select(n); centerOn(n);
+            results.hidden = true; gq.value = '';
+          });
+        });
+      });
+      document.addEventListener('click', (ev) => {
+        if (!results.contains(ev.target) && ev.target !== gq) results.hidden = true;
+      });
+
+      let dragging = false, lx = 0, ly = 0, moved = false;
+      canvas.addEventListener('mousedown', (ev) => { dragging = true; moved = false; lx = ev.offsetX; ly = ev.offsetY; canvas.classList.add('dragging'); });
+      window.addEventListener('mouseup', () => { dragging = false; canvas.classList.remove('dragging'); });
+      canvas.addEventListener('mousemove', (ev) => {
+        if (dragging) {
+          ox += ev.offsetX - lx; oy += ev.offsetY - ly;
+          lx = ev.offsetX; ly = ev.offsetY; moved = true;
+          return;
+        }
+        hover = pick(ev.offsetX, ev.offsetY);
+        if (hover) {
+          tip.hidden = false;
+          tip.textContent = hover.title + '（' + hover.type + '·' + hover.layer + '层）';
+          tip.style.left = ev.offsetX + 14 + 'px';
+          tip.style.top = ev.offsetY + 10 + 'px';
+          canvas.style.cursor = 'pointer';
+        } else {
+          tip.hidden = true;
+          canvas.style.cursor = 'grab';
+        }
+      });
+      canvas.addEventListener('click', (ev) => {
+        if (moved) return;
+        const n = pick(ev.offsetX, ev.offsetY);
+        select(n);
+      });
+      canvas.addEventListener('dblclick', (ev) => {
+        const n = pick(ev.offsetX, ev.offsetY);
+        if (n) location.href = entryPrefix + n.id + '/';
+      });
+      canvas.addEventListener('wheel', (ev) => {
+        ev.preventDefault();
+        const k = ev.deltaY < 0 ? 1.15 : 0.87;
+        ox = ev.offsetX - (ev.offsetX - ox) * k; oy = ev.offsetY - (ev.offsetY - oy) * k;
+        scale *= k;
+      }, { passive: false });
+
+      document.querySelectorAll('.graph-controls input[data-kind]').forEach((cb) => {
+        cb.addEventListener('change', () => {
+          cb.checked ? kinds.add(cb.dataset.kind) : kinds.delete(cb.dataset.kind);
+          rebuild();
+        });
+      });
+      document.getElementById('g-reset').addEventListener('click', resetSkeleton);
+      document.getElementById('g-all').addEventListener('click', showAll);
+
+      resetSkeleton();
+      tick();
+    })();
+  </script>
+</Base>

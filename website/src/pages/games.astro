@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/data.mjs';
+
+const directions = [
+  { title: '宏观策略', desc: '扮演一条国家路径，在 2026—2076 的技术与地缘变局中做制度选择。' },
+  { title: '城市模拟', desc: '经营一座多态社会中的城市或社区，平衡接入、保障与意义供给。' },
+  { title: '叙事探索', desc: '以个体视角穿行于动荡期，在具体处境中体验机制的重量。' },
+];
+---
+<Base title="游戏" active="games">
+  <header class="hero">
+    <h1>游戏</h1>
+    <p class="sub">筹备中 · 三个方向的游戏化探索</p>
+  </header>
+
+  <div class="plan-body">
+    <p>
+      2072 的世界观以机制驱动——变量、因果链、路径分化——这天然适合做成系统性玩法。
+      以下三个方向在探索中，未来的<a class="entry-link" href={url('/slice/')}>时空断面</a>功能
+      将为它们提供背景系统支持。
+    </p>
+
+    <div class="scene-list">
+      {directions.map((d) => (
+        <div class="scene-card">
+          <h3>{d.title}</h3>
+          <p>{d.desc}</p>
+          <span class="fstatus off">规划中</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</Base>

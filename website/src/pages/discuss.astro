@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { giscus } from '../lib/site.config.mjs';
+const enabled = giscus.repoId && giscus.categoryId;
+---
+<Base title="讨论" active="discuss">
+  <header class="hero">
+    <h1>讨论</h1>
+    <p class="sub">对世界观设定的疑问、指摘与推演，欢迎在此讨论（基于 GitHub Discussions，需 GitHub 账号发言）。</p>
+  </header>
+
+  {enabled ? (
+    <div class="giscus-wrap">
+      <script
+        src="https://giscus.app/client.js"
+        data-repo={giscus.repo}
+        data-repo-id={giscus.repoId}
+        data-category={giscus.category}
+        data-category-id={giscus.categoryId}
+        data-mapping={giscus.mapping}
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="light"
+        data-lang={giscus.lang}
+        crossorigin="anonymous"
+        async
+      />
+    </div>
+  ) : (
+    <div class="plan-body">
+      <p>评论区即将开放。</p>
+      <p class="note">
+        （站点维护备忘：讨论区基于 giscus。启用步骤——仓库 Settings 开启 Discussions →
+        安装 giscus App → 在 giscus.app 获取 repoId/categoryId → 填入
+        website/src/lib/site.config.mjs 后重新部署。）
+      </p>
+    </div>
+  )}
+</Base>

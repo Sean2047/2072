@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/data.mjs';
+---
+<Base title="时空断面" active="slice">
+  <header class="hero">
+    <h1>时空断面</h1>
+    <p class="sub">规划中 · 本站未来的核心应用功能</p>
+  </header>
+
+  <div class="plan-body">
+    <p>
+      <strong>设想：</strong>输入一个时间（2026—2076 年间任一年份）与一个地点（国家类别或具体区域），
+      生成该时空断面的世界状态——技术扩散到了哪一步、经济与保障制度处于什么阶段、
+      社会情绪与地缘局势如何。它是为故事写作与游戏开发准备的<strong>背景系统生成器</strong>。
+    </p>
+
+    <h2>路线图</h2>
+    <div class="plan-phases">
+      <div class="plan-phase">
+        <h3>第一期 · 规则式断面</h3>
+        <p>
+          基于既有词条元数据（时间线、路径、L1–L4 扩散阶段、V1–V8 变量）静态拼装断面视图。
+          确定性输出，每一条内容可回溯到具体章节。
+        </p>
+      </div>
+      <div class="plan-phase">
+        <h3>第二期 · 生成式背景系统</h3>
+        <p>
+          在规则式断面之上引入 AI 生成，输出面向创作的叙事化背景设定。
+          生成内容属于叙事支持工具，不回写世界观文档本身。
+        </p>
+      </div>
+    </div>
+
+    <p>
+      在此之前，可以先通过<a class="entry-link" href={url('/read/')}>全文阅读</a>的
+      第五部分（社会发展时间线）、第六部分（地理图景）与第七部分（动荡期分地区分析），
+      或<a class="entry-link" href={url('/entries/')}>词条库</a>按路径与时间筛选，手动构建你需要的断面。
+    </p>
+  </div>
+</Base>

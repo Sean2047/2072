@@ -12,7 +12,7 @@ const rows = Object.entries(jianyu)
   }))
   .sort((a, b) => a.id.localeCompare(b.id));
 ---
-<Base title="关键字词典" active="dict">
+<Base title="关键字词典" active="entries">
   <div class="hero">
     <h1>关键字词典</h1>
     <p class="sub">{rows.length} 个术语，全部已承接为概念词条。"见于"列由构建自动重生成（check_entries.py [J] 项），节号链接指向对应章节词条。</p>
