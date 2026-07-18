@@ -9,3 +9,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 ~$*
+
+# 历史文件
+history/

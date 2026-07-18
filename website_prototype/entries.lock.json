@@ -156,8 +156,8 @@
   "en": "5e5bb0401239d7fd"
  },
  "moxing-shixiao-tiaojian": {
-  "zh": "e2a056fffd6c2e5c",
-  "en": "366dd7e58c9dba40"
+  "zh": "b706791c7dbfd9d9",
+  "en": "aaf30d0136306894"
  },
  "peiji-tixi": {
   "zh": "1504750d1dc3f580",
@@ -174,12 +174,14 @@
  "s1-1-1": {
   "section": "1.1.1",
   "hash": "ff6c217dfd0a2b84",
-  "zh": "ecde6eabd40c6cb8"
+  "zh": "ecde6eabd40c6cb8",
+  "en": "e8b49d6aece28546"
  },
  "s1-1-2": {
   "section": "1.1.2",
   "hash": "c1dff1fa6f04edd4",
-  "zh": "1c961ed4a5f6fe73"
+  "zh": "1c961ed4a5f6fe73",
+  "en": "240cc12f7dd2217f"
  },
  "s1-1": {
   "section": "1.1-intro",
@@ -189,23 +191,27 @@
  },
  "s1-2-1": {
   "section": "1.2.1",
-  "hash": "f933df4484cb1a1b",
-  "zh": "c0f93cbf110a5dc8"
+  "hash": "b50aea0dba6bd999",
+  "zh": "c0f93cbf110a5dc8",
+  "en": "8a1ce98f21afd8ff"
  },
  "s1-2-2": {
   "section": "1.2.2",
-  "hash": "e398ef625239fd93",
-  "zh": "bf9cf22b502d1aff"
+  "hash": "1ff5982faa243100",
+  "zh": "bf9cf22b502d1aff",
+  "en": "b30043325cf0a2a2"
  },
  "s1-2-3": {
   "section": "1.2.3",
-  "hash": "6294bd1d1455c5e7",
-  "zh": "98f6cde7354884f1"
+  "hash": "aef22d2fceda977f",
+  "zh": "49132fbf4cc0b4be",
+  "en": "a023664031685a96"
  },
  "s1-2-4": {
   "section": "1.2.4",
   "hash": "8e5df3784b283b46",
-  "zh": "ea5109ae07170987"
+  "zh": "ea5109ae07170987",
+  "en": "a9712734eeec9623"
  },
  "s1-2": {
   "section": "1.2-intro",
@@ -216,42 +222,50 @@
  "s1-3": {
   "section": "1.3",
   "hash": "d7fdddead5c9fe5a",
-  "zh": "454c3d056b10c00f"
+  "zh": "454c3d056b10c00f",
+  "en": "019c15ab19826739"
  },
  "s1-4-1": {
   "section": "1.4.1",
   "hash": "f5100f96d35d537a",
-  "zh": "c4ea03750c820787"
+  "zh": "c4ea03750c820787",
+  "en": "1444739563ad189d"
  },
  "s1-4-2": {
   "section": "1.4.2",
   "hash": "28412df07efc5c4e",
-  "zh": "2d8dc54e7c827fbf"
+  "zh": "2d8dc54e7c827fbf",
+  "en": "fe4ab6dce6b39375"
  },
  "s1-4-3": {
   "section": "1.4.3",
   "hash": "41f5ac6e5409a2fa",
-  "zh": "f36b38b26f679a67"
+  "zh": "f36b38b26f679a67",
+  "en": "7703888bdcab0039"
  },
  "s1-4-4-1": {
   "section": "1.4.4.1",
   "hash": "065e8950a0064e1f",
-  "zh": "25d404995a668fa5"
+  "zh": "25d404995a668fa5",
+  "en": "a7cf33a90e3d1546"
  },
  "s1-4-4": {
   "section": "1.4.4",
   "hash": "9555412d5477adf4",
-  "zh": "113cc6eb9bf62298"
+  "zh": "113cc6eb9bf62298",
+  "en": "f31216b1dcad8a3e"
  },
  "s1-4-5": {
   "section": "1.4.5",
   "hash": "3b2bf0b8d6e336e6",
-  "zh": "e4664af81b6a5f8f"
+  "zh": "e4664af81b6a5f8f",
+  "en": "012c6ff39f8b0f96"
  },
  "s1-4-6": {
   "section": "1.4.6",
   "hash": "e18eb65efd776aec",
-  "zh": "69d4c9ede6cb04fd"
+  "zh": "69d4c9ede6cb04fd",
+  "en": "f4d4a244f64f4962"
  },
  "s1-4": {
   "section": "1.4-intro",
@@ -262,17 +276,20 @@
  "s1-5-1": {
   "section": "1.5.1",
   "hash": "8f05cfccf597a91a",
-  "zh": "ccb452d3906e8ba7"
+  "zh": "ccb452d3906e8ba7",
+  "en": "0e038d93c0355dec"
  },
  "s1-5-2": {
   "section": "1.5.2",
   "hash": "f17b3acebe8d55b3",
-  "zh": "cdb0d4463ce72e13"
+  "zh": "cdb0d4463ce72e13",
+  "en": "dcd2638a945477d7"
  },
  "s1-5-3": {
   "section": "1.5.3",
   "hash": "2a92421c3adc9f77",
-  "zh": "1f32c9fc86b42269"
+  "zh": "1f32c9fc86b42269",
+  "en": "c6f2da72f50ba759"
  },
  "s1-5": {
   "section": "1.5-intro",
@@ -283,22 +300,26 @@
  "s1-6": {
   "section": "1.6",
   "hash": "3fff683dd17a9a5f",
-  "zh": "0c6199a9fbb9d49a"
+  "zh": "0c6199a9fbb9d49a",
+  "en": "0e8f7cb0c4f616b8"
  },
  "s1-7-1": {
   "section": "1.7.1",
   "hash": "1046a8776e08295a",
-  "zh": "f59750326b267ad9"
+  "zh": "f59750326b267ad9",
+  "en": "ab097052c9ce1710"
  },
  "s1-7-2": {
   "section": "1.7.2",
   "hash": "92e565655fc7bf8a",
-  "zh": "e13e98fc21a369b5"
+  "zh": "e13e98fc21a369b5",
+  "en": "06ea36d6e63a2588"
  },
  "s1-7-3": {
   "section": "1.7.3",
   "hash": "1ae8160c32550e51",
-  "zh": "b5b87015f7605339"
+  "zh": "b5b87015f7605339",
+  "en": "428de2c1f6dc4b3f"
  },
  "s1-7": {
   "section": "1.7-intro",
@@ -2264,8 +2285,8 @@
   "en": "3816c5d20ac05bd7"
  },
  "v6": {
-  "zh": "1d7335347b95663d",
-  "en": "444a8c8f44993187"
+  "zh": "cae06490d0c847ec",
+  "en": "cbcbe19722f6ada9"
  },
  "v7": {
   "zh": "8de74f9a3580a2de",
