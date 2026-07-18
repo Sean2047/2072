@@ -23,6 +23,8 @@ export const fulldoc = loadJSON('fulldoc.json');
 
 export const entries = data.entries;
 export const VARS = data.vars;
+// 外部作品登记表（N-1①）：反对文集/文内文献，不入词条管线，经登记表+指针挂载
+export const externalWorks = data.external_works ?? [];
 export const BASE_DOC = data.base_doc;
 export const byId = new Map(entries.map((e) => [e.id, e]));
 

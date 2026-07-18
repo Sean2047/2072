@@ -230,3 +230,31 @@ section.children h2, section.related h2, section.backlinks h2 {
 .dict-table .seen { font-family: "PingFang SC", sans-serif; font-size: 13px; line-height: 2; }
 .dict-table .seen a { margin-right: 8px; white-space: nowrap; }
 .dict-table .seen .noentry { color: var(--muted); margin-right: 8px; white-space: nowrap; }
+
+/* ---------- N-1（D-074）：入口段 / 外部作品指针区 / 站点页脚 ---------- */
+section.l0 {
+  margin-top: 22px; background: #f6f1e7; border: 1px solid #e8dcc5;
+  border-left: 3px solid #b8926a; border-radius: 6px; padding: 12px 20px;
+}
+.intro-plain p { margin: 0; font-size: 16px; line-height: 1.9; }
+section.ext-works { margin-top: 30px; }
+section.ext-works h2 {
+  font-family: "PingFang SC", sans-serif; font-size: 15px; letter-spacing: 2px;
+  color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; margin: 0 0 10px;
+}
+section.ext-works ul { list-style: none; padding: 0; margin: 0; }
+section.ext-works li { padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 15px; }
+section.ext-works li .badge {
+  font-family: "PingFang SC", sans-serif; font-size: 12px; background: #ede4d3;
+  border-radius: 4px; padding: 1px 8px; margin-right: 8px; color: #7c5a34;
+}
+section.ext-works li .csum { display: block; color: var(--muted); font-size: 13px; margin: 3px 0 0 0; }
+section.ext-works li .tag {
+  font-family: "PingFang SC", sans-serif; font-size: 12px; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 4px; padding: 0 6px; margin-left: 8px;
+}
+.site-foot {
+  text-align: center; color: var(--muted); font-size: 12.5px;
+  font-family: "PingFang SC", sans-serif; margin: 44px 0 20px; line-height: 1.8;
+}
+.site-foot a { color: var(--muted); text-decoration: underline; }

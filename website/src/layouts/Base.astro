@@ -4,9 +4,12 @@ import '../styles/global.css';
 const { title, active = '' } = Astro.props;
 const dataUrl = url('/data.json');
 const nav = [
+  // 门户九区（D-066七区 + D-074增两区：R3裁定反对文集与文内文献各自独立成区）
   { href: url('/'), key: 'home', label: '首页' },
   { href: url('/read/'), key: 'read', label: '全文阅读' },
   { href: url('/entries/'), key: 'entries', label: '词条库' },
+  { href: url('/objections/'), key: 'objections', label: '反对文集' },
+  { href: url('/documents/'), key: 'documents', label: '文内文献' },
   { href: url('/slice/'), key: 'slice', label: '时空断面' },
   { href: url('/stories/'), key: 'stories', label: '故事' },
   { href: url('/games/'), key: 'games', label: '游戏' },
@@ -36,6 +39,11 @@ const nav = [
       <span class="proto">《2072》知识库 · {entries.length} 词条 · 基准 {BASE_DOC.replace('.md', '')}</span>
     </nav>
     <main><slot /></main>
+    <footer class="site-foot">
+      本站全部内容（含反对文集与文内文献等外部引入内容）采用
+      <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" rel="license">CC BY-NC-ND 4.0</a>
+      许可（署名 — 非商业性使用 — 禁止演绎）· © 2026 《2072》
+    </footer>
     <div id="tooltip" hidden></div>
     <script define:vars={{ dataUrl }}>
       // 悬停预览：首次悬停时惰性拉取词条摘要数据（零依赖，沿用原型交互）

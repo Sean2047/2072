@@ -27,6 +27,18 @@ def _latest_base_doc():
 V149 = _latest_base_doc()  # 变量名沿用历史命名，实际指向当前最新版本基准文档
 ENTRY_DIR = os.path.join(BASE, 'entries')
 OUT = os.path.join(BASE, 'site')
+EXT_WORKS = os.path.join(BASE, 'external_works.json')  # 外部作品登记表（N-1①，D-074）
+
+def load_external_works():
+    """外部作品登记表：反对文集/文内文献不入词条管线，经登记表+指针挂载（D-072框架裁定）。
+    硬校验（targets 悬空报错）在 check_entries.py [X] 项；此处容错读取。"""
+    if not os.path.exists(EXT_WORKS):
+        return []
+    try:
+        return json.load(open(EXT_WORKS, encoding='utf-8')).get('works', [])
+    except (json.JSONDecodeError, OSError) as ex:
+        print(f'[警告] external_works.json 读取失败（{ex}），指针区跳过', file=sys.stderr)
+        return []
 
 # ---------- frontmatter ----------
 
@@ -221,6 +233,8 @@ def entry_page(e, body_html, backlinks, id2entry, iface=None):
     if e.get('note'):
         parts.append(f'<div class="note">⚠ {inline_md(e["note"])}</div>')
     parts.append('</header>')
+    if e.get('intro_plain'):  # 读者化入口段（N-1②）：渲染于三层渐进披露之前作首屏
+        parts.append(f'<section class="l0"><div class="ltag">这是什么</div><div class="intro-plain">{md_to_html(e["intro_plain"])}</div></section>')
     parts.append(f'<section class="l1"><div class="ltag">一句话摘要</div><p class="summary">{inline_md(e["summary"])}</p></section>')
     parts.append(f'<section class="l2"><div class="ltag">一段概述</div>{md_to_html(e["overview"])}</section>')
     if e['type'] == '事件' and e.get('time_span'):
@@ -249,6 +263,12 @@ def entry_page(e, body_html, backlinks, id2entry, iface=None):
     if backlinks:
         bl = ''.join(f'<a class="entry-link chip" href="{b}.html" data-id="{b}">{html.escape(id2entry[b]["title"])}</a>' for b in sorted(backlinks))
         parts.append(f'<section class="backlinks"><h2>反向链接（引用了本词条）</h2><div class="chips">{bl}</div></section>')
+    if e.get('_ext'):  # 外部作品指针区（N-1①）：相关反对文/相关文献
+        CAT = {'反对': '相关反对文', '文献': '相关文献'}
+        items = ''.join(f'<li><span class="badge">{w["category"]}</span> {html.escape(w["title"])}'
+                        f'<span class="csum">{html.escape(w.get("summary", ""))}</span>'
+                        f'<span class="tag">{w["status"]}</span></li>' for w in e['_ext'])
+        parts.append(f'<section class="ext-works"><h2>{"、".join(sorted({CAT[w["category"]] for w in e["_ext"]}))}</h2><ul>{items}</ul></section>')
     return PAGE.format(title=html.escape(e['title']), content='\n'.join(parts))
 
 def index_page(entries):
@@ -284,6 +304,28 @@ def main():
                        key=lambda x: -len(x[0]))
     stats = {'resolved': [], 'unresolved': [], 'term_links': 0, 'term_edges': []}
 
+    # ---------- 外部作品指针挂载（N-1①）：target=词条ID → 该词条页；target=节号 → 对应词条（若有）+ 全文阅读所在二级节页 ----------
+    works = load_external_works()
+    doc_headings = set()
+    for l in lines:
+        hm = re.match(r'^#{2,4}\s+(\d+\.\d+(?:\.\d+){0,2})　', l)
+        if hm:
+            doc_headings.add(hm.group(1))
+    works_by_entry, works_by_fdsec, works_unmatched = {}, {}, []
+    def _work_ref(w):
+        return {k: w.get(k) for k in ('id', 'title', 'category', 'summary', 'status', 'url')}
+    for w in works:
+        for t in w.get('targets', []):
+            if t in id2entry:
+                works_by_entry.setdefault(t, []).append(_work_ref(w))
+            elif t in doc_headings:
+                if t in sec_map:
+                    works_by_entry.setdefault(sec_map[t], []).append(_work_ref(w))
+                sec2 = '.'.join(t.split('.')[:2])  # 全文阅读按二级节分页
+                works_by_fdsec.setdefault(sec2, []).append(_work_ref(w))
+            else:
+                works_unmatched.append((w.get('id', '?'), t))
+
     bodies = {}
     for e in entries:
         if e.get('extract'):
@@ -318,6 +360,7 @@ def main():
 
     os.makedirs(OUT, exist_ok=True)
     for e in entries:
+        e['_ext'] = works_by_entry.get(e['id'])
         with open(os.path.join(OUT, e['id'] + '.html'), 'w', encoding='utf-8') as f:
             f.write(entry_page(e, bodies[e['id']], backlinks.get(e['id'], set()), id2entry, ifaces.get(e['id'])))
     with open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8') as f:
@@ -376,6 +419,11 @@ def main():
         item['summary_en_html'] = inline_md(e['summary_en']) if e.get('summary_en') else None
         item['overview_en_html'] = md_to_html(e['overview_en']) if e.get('overview_en') else None
         item['note_html'] = inline_md(e['note']) if e.get('note') else None
+        # 读者化入口段（N-1②，可选字段；[E]项不受影响，英译随全文翻译轮统筹）
+        item['intro_plain'] = e.get('intro_plain') or None
+        item['intro_plain_html'] = md_to_html(e['intro_plain']) if e.get('intro_plain') else None
+        # 外部作品指针（N-1①）：被指向词条附带相关反对文/文献引用
+        item['external_works'] = works_by_entry.get(e['id'], [])
         item['body_html'] = bodies[e['id']]
         if e['id'] in ifaces:
             item['interface_html'] = ifaces[e['id']]
@@ -386,6 +434,7 @@ def main():
         'base_doc': os.path.basename(V149),
         'vars': VARS,
         'entries': export,
+        'external_works': [_work_ref(w) | {'targets': w.get('targets', [])} for w in works],
         'unresolved_refs': graph['unresolved_refs'],
     }
     with open(os.path.join(OUT, 'entries.json'), 'w', encoding='utf-8') as f:
@@ -455,7 +504,8 @@ def main():
                 sec_no, stitle = '', s['title']
                 sslug = f'{cslug}-s{len(fc["sections"])+1}'
             fc['sections'].append({'slug': sslug, 'sec_no': sec_no, 'title': stitle,
-                                    'html': _render_doc('\n'.join(s['lines']).strip(), f'doc-{sslug}')})
+                                    'html': _render_doc('\n'.join(s['lines']).strip(), f'doc-{sslug}'),
+                                    'external_works': works_by_fdsec.get(sec_no, [])})
         fd_chapters.append(fc)
     fulldoc = {
         'built_from': f'{os.path.basename(V149)}（构建产物，勿手工编辑；全文阅读视图，内容零改写）',
@@ -504,6 +554,12 @@ CREATE VIEW orphans AS SELECT id, title FROM nodes WHERE id NOT IN (SELECT dst F
         print(f'  - [{src}] → {sec}节（未收录）')
 
     print(f'概念术语自动链接：{stats["term_links"]} 处')
+    n_mount = sum(len(v) for v in works_by_entry.values()) + sum(len(v) for v in works_by_fdsec.values())
+    print(f'外部作品登记表：{len(works)} 件（反对 {sum(1 for w in works if w.get("category") == "反对")} / '
+          f'文献 {sum(1 for w in works if w.get("category") == "文献")}）；指针挂载 {n_mount} 处'
+          f'（词条页 {sum(len(v) for v in works_by_entry.values())} / 全文节页 {sum(len(v) for v in works_by_fdsec.values())}）')
+    for wid, t in works_unmatched:
+        print(f'  [警告] 外部作品 {wid} 的 target "{t}" 不可解析（check_entries [X] 项将报错）', file=sys.stderr)
 
 if __name__ == '__main__':
     main()

@@ -81,6 +81,22 @@ if (page.kind === 'section' && page.s.sec_no && /^[0-9A]/.test(page.s.sec_no)) {
     </section>
   )}
 
+  {page.kind === 'section' && (page.s.external_works || []).length > 0 && (
+    <section class="ext-works">
+      <h2>相关反对文与文献</h2>
+      <ul>
+        {page.s.external_works.map((w) => (
+          <li>
+            <span class="badge">{w.category}</span>
+            {w.status === '已发布' && w.url ? <a href={w.url}>{w.title}</a> : w.title}
+            <span class="csum">{w.summary}</span>
+            <span class="tag">{w.status}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   <nav class="read-nav">
     {prev ? <a class="entry-link" href={url(`/read/${prev.slug}/`)}>← {titleOf(prev)}</a> : <span />}
     {next ? <a class="entry-link" href={url(`/read/${next.slug}/`)}>{titleOf(next)} →</a> : <span />}

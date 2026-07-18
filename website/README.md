@@ -32,6 +32,10 @@ npm run build     # 或 npm run dev 起开发服务器
 - `/graph/` 知识图谱：canvas 力导向，按边类型与节点层过滤
 - `/dict/` 关键字词典：77 术语 + "见于"列（构建自动重生成）
 
+- `/objections/` 反对文集、`/documents/` 文内文献（D-074增区，导航九项）：占位页+登记表篇目列表；
+  外部作品经 `website_prototype/external_works.json` 登记后，被指向词条页与全文分节页自动渲染指针区，
+  词条页另支持可选 `intro_plain` 入口段（渲染于三层披露之前）。站点页脚含 CC BY-NC-ND 4.0 许可声明。
+
 i18n：Astro i18n 路由已配置（zh 默认无前缀，en 预留 `/en/`，D-050 翻译后置）。
 
 ## 部署

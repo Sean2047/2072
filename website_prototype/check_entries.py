@@ -15,6 +15,9 @@
   [V] source 字段可验证性格式校验（D-051③：须含"§节号 第N段"或"词典"等可定位锚点，否则告警）
   [E] 英文层校验（D-070：title_en/summary_en/overview_en 三字段全有或全无；术语表禁用变体 lint；
       双语漂移——中文 summary/overview 改动而英文未同轮更新时告警；进度统计）
+  [X] 外部作品登记表校验（N-1①/D-074：external_works.json 必填字段、取值域、ID 唯一性；
+      targets 必须可解析为词条ID或基准文档节号——主文件重构悬空即报错）
+      附 intro_plain 代号禁用 lint（N-4 规范预置：V1–V8/L1–L4/路径代号不得出现在入口段）
 退出码: 有 ERROR 为 1，否则 0。
 """
 import os, re, sys, json, glob, hashlib
@@ -242,6 +245,51 @@ def main():
             if bad.lower() in en_text.lower():
                 errors.append(f'[E] {eid}: 命中禁用变体 "{bad}"——{why}')
     infos.append(f'[E] 英文层进度：{en_done}/{len(entries)} 词条已双语')
+
+    # [X] 外部作品登记表校验（N-1①/D-074）
+    ext_path = os.path.join(BASE, 'external_works.json')
+    if os.path.exists(ext_path):
+        ext_works = []
+        try:
+            ext_works = json.load(open(ext_path, encoding='utf-8')).get('works', [])
+        except (json.JSONDecodeError, OSError) as ex:
+            errors.append(f'[X] external_works.json 解析失败：{ex}')
+        VALID_CAT, VALID_STATUS = {'反对', '文献'}, {'规划中', '已发布'}
+        wids = set()
+        for w in ext_works:
+            wid = w.get('id', '?')
+            if wid in wids:
+                errors.append(f'[X] 作品 ID 重复：{wid}')
+            wids.add(wid)
+            for k in ('id', 'title', 'category', 'targets', 'summary', 'status'):
+                if not w.get(k):
+                    errors.append(f'[X] {wid}: 缺必填字段 {k}')
+            if w.get('category') and w['category'] not in VALID_CAT:
+                errors.append(f'[X] {wid}: category 取值非法 "{w["category"]}"（须为 反对|文献）')
+            if w.get('status') and w['status'] not in VALID_STATUS:
+                errors.append(f'[X] {wid}: status 取值非法 "{w["status"]}"（须为 规划中|已发布）')
+            if w.get('status') == '已发布' and not w.get('url'):
+                warns.append(f'[X] {wid}: 状态已发布但无 url')
+            for t in w.get('targets', []):
+                if t in ids or t in headings:
+                    continue
+                errors.append(f'[X] {wid}: target "{t}" 不可解析（既非词条ID也非基准文档节号）——主文件重构后须同步登记表')
+        infos.append(f'[X] 外部作品登记 {len(ext_works)} 件'
+                     f'（反对 {sum(1 for w in ext_works if w.get("category") == "反对")} / '
+                     f'文献 {sum(1 for w in ext_works if w.get("category") == "文献")}）')
+
+    # [X-附] intro_plain 代号禁用 lint（N-4 写作规范预置：入口段=生活含义语域，代号一律不得出现）
+    CODE_PAT = re.compile(r'(?<![A-Za-z0-9])(V[1-8]|L[1-4]|A1|A2|B1|B2)(?![A-Za-z0-9])')
+    n_intro = 0
+    for e in entries:
+        if not e.get('intro_plain'):
+            continue
+        n_intro += 1
+        hits = sorted(set(CODE_PAT.findall(e['intro_plain'])))
+        if hits:
+            errors.append(f'[X] {e.get("id", "?")}: intro_plain 出现禁用代号 {"、".join(hits)}（N-4 规范：入口段不得用 V1–V8/L1–L4/路径代号）')
+    if n_intro:
+        infos.append(f'[X] 入口段（intro_plain）已填 {n_intro}/{len(entries)} 词条')
 
     # [C] 切分进度（仅统计三级节可切分单元；索引词条按二级节计）
     lvl2 = [s for s in amap if re.match(r'^\d+\.\d+$', s)]

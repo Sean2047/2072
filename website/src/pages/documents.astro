@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { externalWorks, url } from '../lib/data.mjs';
+
+// 文内文献（D-072立项/D-074增区）：来自2072世界内部的文本，独立成区（R3裁定）。
+// 正文独立成文独立版本，不受主文件版本递增约束；经登记表挂载至对应机制词条（N-3）。
+const works = externalWorks.filter((w) => w.category === '文献');
+---
+<Base title="文内文献" active="documents">
+  <header class="hero">
+    <h1>文内文献</h1>
+    <p class="sub">筹备中 · 来自那个世界内部的文本</p>
+  </header>
+
+  <div class="plan-body">
+    <p>
+      理论正文从外部分析那个世界，文内文献从内部呈现它：
+      教材节选、BSC 用户手册、供应票据使用须知、动荡期的社论、口述史访谈——
+      以世界内的知识状态写作，是机制的展品而非解说。
+      同一件事在不同路径下的文本措辞差异，本身就是设定的一部分。
+    </p>
+    <p>
+      每篇文献独立成文，经登记表挂载到它所展示的机制词条；
+      被挂载的词条与章节会挂出指向本区的链接。
+    </p>
+
+    {works.length > 0 && (
+      <div class="scene-list">
+        {works.map((w) => (
+          <div class="scene-card">
+            <h3>{w.status === '已发布' && w.url ? <a href={w.url}>{w.title}</a> : w.title}</h3>
+            <p>{w.summary}</p>
+            <span class={`fstatus ${w.status === '已发布' ? 'on' : 'off'}`}>{w.status}</span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <p>
+      首批篇目规划中。机制本身见<a class="entry-link" href={url('/entries/')}>词条库</a>，
+      叙事创作见<a class="entry-link" href={url('/stories/')}>故事</a>区。
+    </p>
+  </div>
+</Base>

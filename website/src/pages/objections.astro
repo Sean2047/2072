@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { externalWorks, url } from '../lib/data.mjs';
+
+// 反对文集（D-072立项/D-074增区）：与理论正文平级对峙的独立语料库。
+// 内容由独立AI起草、作者验收（N-2/N-6流程）；世界外视角写作（R2裁定）。
+// 篇目来源=外部作品登记表（external_works.json），本页零内容职责。
+const works = externalWorks.filter((w) => w.category === '反对');
+---
+<Base title="反对文集" active="objections">
+  <header class="hero">
+    <h1>反对文集</h1>
+    <p class="sub">筹备中 · 为什么《2072》可能是错的</p>
+  </header>
+
+  <div class="plan-body">
+    <p>
+      理论正文给出的是单一最可能场景的深推演，它的承重假设值得被认真攻击。
+      本区收录对这些假设的系统性反驳，体裁参照《反联邦党人文集》：
+      每篇先以最强形式重构所批评的立场，再落到具体节号的具体机制提出质疑，
+      以可判定的检验条件收尾——不做"太乐观/太悲观"式的无机制总评。
+    </p>
+    <p>
+      反驳由独立 AI 起草、作者验收后发布，与理论正文相互独立：
+      正文不为反驳修改，反驳不因正文而软化。被批评的词条与章节会挂出指向本区的链接。
+    </p>
+
+    {works.length > 0 && (
+      <div class="scene-list">
+        {works.map((w) => (
+          <div class="scene-card">
+            <h3>{w.status === '已发布' && w.url ? <a href={w.url}>{w.title}</a> : w.title}</h3>
+            <p>{w.summary}</p>
+            <span class={`fstatus ${w.status === '已发布' ? 'on' : 'off'}`}>{w.status}</span>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <p>
+      在此之前，可先阅读<a class="entry-link" href={url('/read/')}>世界观全文</a>——
+      尤其是其中自我声明的方法论局限，那是本区各篇的起点。
+    </p>
+  </div>
+</Base>

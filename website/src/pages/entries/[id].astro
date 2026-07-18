@@ -36,6 +36,10 @@ const back = [...(inbound.get(id) || new Map()).entries()]
   .sort((a, b) => a.e.id.localeCompare(b.e.id));
 
 const secOf = (x) => (x.extract ? x.extract.replace(/-(intro|full)$/, '') : '');
+
+// 外部作品指针区（N-1①）：相关反对文 / 相关文献
+const extWorks = e.external_works || [];
+const extTitle = [...new Set(extWorks.map((w) => ({ 反对: '相关反对文', 文献: '相关文献' })[w.category]))].join('、');
 ---
 <Base title={e.title}>
   <header class="entry-head">
@@ -50,6 +54,13 @@ const secOf = (x) => (x.extract ? x.extract.replace(/-(intro|full)$/, '') : '');
     </div>
     {e.note_html && <div class="note">⚠ <Fragment set:html={e.note_html} /></div>}
   </header>
+
+  {e.intro_plain_html && (
+    <section class="l0">
+      <div class="ltag">这是什么</div>
+      <div class="intro-plain"><Fragment set:html={e.intro_plain_html} /></div>
+    </section>
+  )}
 
   <section class="l1">
     <div class="ltag">一句话摘要</div>
@@ -119,6 +130,22 @@ const secOf = (x) => (x.extract ? x.extract.replace(/-(intro|full)$/, '') : '');
           </a>
         ))}
       </div>
+    </section>
+  )}
+
+  {extWorks.length > 0 && (
+    <section class="ext-works">
+      <h2>{extTitle}</h2>
+      <ul>
+        {extWorks.map((w) => (
+          <li>
+            <span class="badge">{w.category}</span>
+            {w.status === '已发布' && w.url ? <a href={w.url}>{w.title}</a> : w.title}
+            <span class="csum">{w.summary}</span>
+            <span class="tag">{w.status}</span>
+          </li>
+        ))}
+      </ul>
     </section>
   )}
 </Base>
